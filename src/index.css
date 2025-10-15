@@ -1,0 +1,280 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  * {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01', 'ss02';
+    background: #000000;
+  }
+  
+  body {
+    font-feature-settings: 'rlig' 1, 'calt' 1, 'kern' 1, 'liga' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-weight: 400;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    font-feature-settings: 'ss01', 'ss02';
+  }
+  
+  h1 {
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+  
+  h2 {
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  
+  h3 {
+    font-weight: 700;
+    letter-spacing: -0.005em;
+  }
+  
+  p {
+    line-height: 1.7;
+    font-weight: 400;
+  }
+  
+  .font-display {
+    font-feature-settings: 'ss01', 'ss02', 'cv02', 'cv03';
+  }
+  
+  .tracking-tighter {
+    letter-spacing: -0.05em;
+  }
+  
+  .tracking-tight {
+    letter-spacing: -0.025em;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-black/20 backdrop-blur-2xl border border-white/15 shadow-lg ring-1 ring-white/5;
+  }
+  
+  .glass-button {
+    @apply bg-black/20 backdrop-blur-2xl border border-white/15 hover:bg-black/30 hover:border-white/25 transition-all duration-300 ring-1 ring-white/5;
+  }
+  
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .slider::-webkit-slider-track {
+    background: transparent;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    border: 2px solid #374151;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+    transition: all 0.2s ease;
+  }
+
+  .slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+  }
+
+  .slider::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    border: 2px solid #374151;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+    transition: all 0.2s ease;
+  }
+
+  .slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-fadeIn {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-slideInRight {
+    animation: slideInRight 0.6s ease-out;
+  }
+  
+      .animate-pulse-slow {
+        animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      
+      .animate-connect-flash {
+        animation: connectFlash 1.5s ease-in-out infinite;
+      }
+      
+      .animate-connect-pulse {
+        animation: connectPulse 2s ease-in-out infinite;
+      }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  @keyframes connectFlash {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.3; transform: scale(1.2); }
+  }
+  
+  @keyframes connectPulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+  }
+  
+  .animate-spin-slow {
+    animation: spin-slow 3s linear infinite;
+  }
+  
+  .animate-spin-slow-reverse {
+    animation: spin-slow-reverse 3s linear infinite;
+  }
+  
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  @keyframes spin-slow-reverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+  }
+  
+  /* Fix AppKit modal blur issues */
+  [data-w3m-modal] {
+    backdrop-filter: none !important;
+  }
+  
+  body:has([data-w3m-modal]) {
+    backdrop-filter: none !important;
+  }
+  
+  /* Ensure modal backdrop doesn't blur the entire page */
+  .w3m-modal-backdrop {
+    backdrop-filter: blur(4px) !important;
+  }
+  
+  /* Prevent body blur when modal is open */
+  body.w3m-modal-open {
+    backdrop-filter: none !important;
+  }
+  
+  /* Fix Nexus widgets styling conflicts */
+  .nexus-widget {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+  
+  /* Override Nexus widget styles if needed */
+  [data-nexus-widget] {
+    background: transparent !important;
+    border: none !important;
+  }
+  
+  /* Fix navigation bar positioning - aggressive override */
+  nav {
+    position: fixed !important;
+    top: 1rem !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 50 !important;
+    width: 100% !important;
+    max-width: 80rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    margin: 0 !important;
+    right: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  /* Override any Tailwind or other framework styles */
+  nav[class*="fixed"],
+  nav.fixed,
+  nav[class*="top-4"],
+  nav[class*="left-1/2"] {
+    position: fixed !important;
+    top: 1rem !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 50 !important;
+  }
+  
+  @media (min-width: 640px) {
+    nav.fixed {
+      padding-left: 1.5rem !important;
+      padding-right: 1.5rem !important;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    nav.fixed {
+      padding-left: 2rem !important;
+      padding-right: 2rem !important;
+    }
+  }
+}
+
+/* Animation for success notification */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideInRight {
+  animation: slideInRight 0.3s ease-out;
+}
