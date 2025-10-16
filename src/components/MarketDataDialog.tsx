@@ -189,20 +189,26 @@ export const MarketDataDialog: React.FC<MarketDataDialogProps> = ({
                   <div className="mb-6">
                     <button 
                       onClick={() => onDEXSelect(DEXES.find(dex => dex.id === 'hyperliquid')!)}
-                      className={`w-full p-4 rounded-xl transition-all duration-300 text-left border-2 ${
+                      className={`w-full p-4 rounded-xl transition-all duration-500 ease-in-out text-left border-2 ${
                         selectedDEX.id === 'hyperliquid'
-                          ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-blue-400/50 shadow-lg shadow-blue-500/20'
-                          : 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20 hover:from-blue-500/15 hover:to-cyan-500/15 hover:border-blue-500/30'
+                          ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-blue-400/60 shadow-xl shadow-blue-500/30 ring-2 ring-blue-400/20'
+                          : 'bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border-blue-500/20 hover:from-blue-500/15 hover:to-cyan-500/15 hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/10'
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-3">
                         <img src="https://hyperliquid.gitbook.io/hyperliquid-docs/~gitbook/image?url=https%3A%2F%2F2356094849-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FyUdp569E6w18GdfqlGvJ%252Ficon%252FsIAjqhKKIUysM08ahKPh%252FHL-logoSwitchDISliStat.png%3Falt%3Dmedia%26token%3Da81fa25c-0510-4d97-87ff-3fb8944935b1&width=32&dpr=4&quality=100&sign=3e1219e3&sv=2" alt="Hyperliquid" className="w-6 h-6 rounded-full" />
                         <span className="font-semibold text-white">Hyperliquid</span>
-                        {selectedDEX.id === 'hyperliquid' && (
-                          <span className="ml-auto text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30">
-                            Selected
-                          </span>
-                        )}
+                        <div className="ml-auto">
+                          {selectedDEX.id === 'hyperliquid' ? (
+                            <span className="text-xs bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full border border-blue-500/30 transition-all duration-300 ease-in-out animate-fadeIn">
+                              Selected
+                            </span>
+                          ) : (
+                            <span className="text-xs px-2 py-1 rounded-full opacity-0">
+                              Selected
+                            </span>
+                          )}
+                        </div>
                       </div>
                       
                       <div className="grid grid-cols-2 gap-4">
@@ -253,20 +259,26 @@ export const MarketDataDialog: React.FC<MarketDataDialogProps> = ({
                   <div className="mb-6">
                     <button 
                       onClick={() => onDEXSelect(DEXES.find(dex => dex.id === 'aster')!)}
-                      className={`w-full p-4 rounded-xl transition-all duration-300 text-left border-2 ${
+                      className={`w-full p-4 rounded-xl transition-all duration-500 ease-in-out text-left border-2 ${
                         selectedDEX.id === 'aster'
-                          ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400/50 shadow-lg shadow-purple-500/20'
-                          : 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/20 hover:from-purple-500/15 hover:to-pink-500/15 hover:border-purple-500/30'
+                          ? 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-purple-400/60 shadow-xl shadow-purple-500/30 ring-2 ring-purple-400/20'
+                          : 'bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/20 hover:from-purple-500/15 hover:to-pink-500/15 hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/10'
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-3">
                         <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/36341.png" alt="Aster" className="w-6 h-6 rounded-full" />
                         <span className="font-semibold text-white">Aster</span>
-                        {selectedDEX.id === 'aster' && (
-                          <span className="ml-auto text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full border border-purple-500/30">
-                            Selected
-                          </span>
-                        )}
+                        <div className="ml-auto">
+                          {selectedDEX.id === 'aster' ? (
+                            <span className="text-xs bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full border border-purple-500/30 transition-all duration-300 ease-in-out animate-fadeIn">
+                              Selected
+                            </span>
+                          ) : (
+                            <span className="text-xs px-2 py-1 rounded-full opacity-0">
+                              Selected
+                            </span>
+                          )}
+                        </div>
                       </div>
                       
                       <div className="grid grid-cols-2 gap-4">
@@ -317,20 +329,26 @@ export const MarketDataDialog: React.FC<MarketDataDialogProps> = ({
                   <div className="mb-6">
                     <button 
                       onClick={() => onDEXSelect(DEXES.find(dex => dex.id === 'reya')!)}
-                      className={`w-full p-4 rounded-xl transition-all duration-300 text-left border-2 ${
+                      className={`w-full p-4 rounded-xl transition-all duration-500 ease-in-out text-left border-2 ${
                         selectedDEX.id === 'reya'
-                          ? 'bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border-indigo-400/50 shadow-lg shadow-indigo-500/20'
-                          : 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border-indigo-500/20 hover:from-indigo-500/15 hover:to-purple-500/15 hover:border-indigo-500/30'
+                          ? 'bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border-indigo-400/60 shadow-xl shadow-indigo-500/30 ring-2 ring-indigo-400/20'
+                          : 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border-indigo-500/20 hover:from-indigo-500/15 hover:to-purple-500/15 hover:border-indigo-500/30 hover:shadow-lg hover:shadow-indigo-500/10'
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-3">
                         <img src="https://cdn.prod.website-files.com/66b5e4e47712e879f0c5ef1b/686bcf104a9c1d2d2c69c5da_r.svg" alt="Reya" className="w-6 h-6" />
                         <span className="font-semibold text-white">Reya</span>
-                        {selectedDEX.id === 'reya' && (
-                          <span className="ml-auto text-xs bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded-full border border-indigo-500/30">
-                            Selected
-                          </span>
-                        )}
+                        <div className="ml-auto">
+                          {selectedDEX.id === 'reya' ? (
+                            <span className="text-xs bg-indigo-500/20 text-indigo-400 px-2 py-1 rounded-full border border-indigo-500/30 transition-all duration-300 ease-in-out animate-fadeIn">
+                              Selected
+                            </span>
+                          ) : (
+                            <span className="text-xs px-2 py-1 rounded-full opacity-0">
+                              Selected
+                            </span>
+                          )}
+                        </div>
                       </div>
                       
                       <div className="grid grid-cols-2 gap-4">
