@@ -1,38 +1,68 @@
-import {
-  CHAIN_METADATA,
-  MAINNET_CHAINS,
-} from '@avail-project/nexus-widgets';
-import type { Chain } from '../types';
-
-// Map Nexus SDK chain data to our Chain interface
-export const SUPPORTED_CHAINS: Chain[] = MAINNET_CHAINS.map(chainId => {
-  const metadata = CHAIN_METADATA[chainId];
-  return {
-    id: chainId,
-    name: metadata.name,
-    shortName: metadata.shortName,
-    logo: metadata.logo,
-    nativeCurrency: {
-      name: metadata.nativeCurrency.name,
-      symbol: metadata.nativeCurrency.symbol,
-      decimals: metadata.nativeCurrency.decimals
-    },
-    rpcUrls: metadata.rpcUrls || [],
-    blockExplorerUrls: metadata.blockExplorerUrls || []
+export interface Chain {
+  id: number;
+  name: string;
+  shortName: string;
+  logo: string;
+  nativeCurrency: {
+    name: string;
+    symbol: string;
+    decimals: number;
   };
-});
+  rpcUrls: string[];
+  blockExplorerUrls: string[];
+}
 
-// Chain ID constants for easy reference
-export const CHAIN_IDS = {
-  ETHEREUM: 1,
-  BASE: 8453,
-  ARBITRUM: 42161,
-  OPTIMISM: 10,
-  POLYGON: 137,
-  AVALANCHE: 43114,
-  SCROLL: 534352,
-  SOPHON: 50104,
-  KAIA: 8217,
-  BNB: 56,
-  HYPEREVM: 999,
-} as const;
+export const CHAINS: Chain[] = [
+  { 
+    id: 1, 
+    name: 'Ethereum', 
+    shortName: 'ETH',
+    logo: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png',
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    rpcUrls: ['https://mainnet.infura.io/v3/'],
+    blockExplorerUrls: ['https://etherscan.io']
+  },
+  { 
+    id: 42161, 
+    name: 'Arbitrum', 
+    shortName: 'ARB',
+    logo: 'https://assets.coingecko.com/coins/images/16547/large/photo_2023-03-29_21.47.00.jpeg',
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    rpcUrls: ['https://arb1.arbitrum.io/rpc'],
+    blockExplorerUrls: ['https://arbiscan.io']
+  },
+  { 
+    id: 8453, 
+    name: 'Base', 
+    shortName: 'BASE',
+    logo: 'https://assets.coingecko.com/coins/images/27505/large/lusd.png',
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    rpcUrls: ['https://mainnet.base.org'],
+    blockExplorerUrls: ['https://basescan.org']
+  },
+  { 
+    id: 10, 
+    name: 'Optimism', 
+    shortName: 'OP',
+    logo: 'https://assets.coingecko.com/coins/images/25244/large/Optimism.png',
+    nativeCurrency: {
+      name: 'Ethereum',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    rpcUrls: ['https://mainnet.optimism.io'],
+    blockExplorerUrls: ['https://optimistic.etherscan.io']
+  }
+];

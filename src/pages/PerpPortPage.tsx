@@ -2,238 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useNexus } from '@avail-project/nexus-widgets';
 import { useAccount } from 'wagmi';
 import { useAppKit, useAppKitAccount } from '@reown/appkit/react';
-import { AlertCircle, ExternalLink, ArrowRight, Zap, Download, TrendingUp, X, BarChart3 } from 'lucide-react';
+import { AlertCircle, ExternalLink, Zap, Download, TrendingUp, BarChart3 } from 'lucide-react';
 import { useHyperliquid } from '../hooks/useHyperliquid';
 import { useAster } from '../hooks/useAster';
 import { useHyperliquidData } from '../hooks/useHyperliquidData';
 import { useAsterData } from '../hooks/useAsterData';
 import { useReyaData } from '../hooks/useReyaData';
-import { getFundingRateColor, getFundingRateBgColor } from '../services/hyperliquidApi';
-import { getAsterFundingRateColor, getAsterFundingRateBgColor } from '../services/asterApi';
-import { getReyaFundingRateColor, getReyaFundingRateBgColor } from '../services/reyaApi';
+import { MarketDataDialog } from '../components/MarketDataDialog';
+import { DEXES } from '../constants/dexes';
+import { CHAINS } from '../constants/chains';
+import { TOKENS } from '../constants/tokens';
+import { MARKET_DATA } from '../constants/marketData';
 
-// DEX configurations
-const DEXES = [
-  {
-    id: 'hyperliquid',
-    name: 'Hyperliquid',
-    logo: 'https://hyperliquid.gitbook.io/hyperliquid-docs/~gitbook/image?url=https%3A%2F%2F2356094849-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FyUdp569E6w18GdfqlGvJ%252Ficon%252FsIAjqhKKIUysM08ahKPh%252FHL-logoSwitchDISliStat.png%3Falt%3Dmedia%26token%3Da81fa25c-0510-4d97-87ff-3fb8944935b1&width=32&dpr=4&quality=100&sign=3e1219e3&sv=2',
-    description: 'Decentralized perpetual exchange',
-    supportedChains: ['Ethereum', 'Arbitrum', 'Base', 'Optimism'],
-    depositContract: '0x...', // Placeholder
-    color: 'from-blue-500 to-cyan-500'
-  },
-  {
-    id: 'aster',
-    name: 'Aster',
-    logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/36341.png',
-    description: 'Cross-chain perpetual protocol',
-    supportedChains: ['Ethereum', 'Arbitrum', 'Base'],
-    depositContract: '0x...', // Placeholder
-    color: 'from-purple-500 to-pink-500'
-  },
-  // {
-  //   id: 'lighter',
-  //   name: 'Lighter',
-  //   logo: 'https://framerusercontent.com/images/k22lnUP5Ao1xIheAoknaPGmdjXk.svg?width=14&height=26',
-  //   description: 'High-performance perpetual DEX',
-  //   supportedChains: ['Ethereum', 'Arbitrum'],
-  //   depositContract: '0x...', // Placeholder
-  //   color: 'from-green-500 to-emerald-500'
-  // },
-  {
-    id: 'reya',
-    name: 'Reya',
-    logo: 'https://cdn.prod.website-files.com/66b5e4e47712e879f0c5ef1b/686bcf104a9c1d2d2c69c5da_r.svg',
-    description: 'Cross-chain perpetual protocol',
-    supportedChains: ['Ethereum', 'Arbitrum', 'Base'],
-    depositContract: '0x...', // Placeholder
-    color: 'from-indigo-500 to-purple-500'
-  }
-];
-
-const CHAINS = [
-  { id: 1, name: 'Ethereum', symbol: 'ETH', logo: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png' },
-  { id: 42161, name: 'Arbitrum', symbol: 'ETH', logo: 'https://assets.coingecko.com/coins/images/16547/large/photo_2023-03-29_21.47.00.jpeg' },
-  { id: 8453, name: 'Base', symbol: 'ETH', logo: 'https://assets.coingecko.com/coins/images/27505/large/lusd.png' },
-  { id: 10, name: 'Optimism', symbol: 'ETH', logo: 'https://assets.coingecko.com/coins/images/25244/large/Optimism.png' }
-];
-
-const TOKENS = [
-  { symbol: 'ETH', name: 'Ethereum', decimals: 18, logo: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png' },
-  { symbol: 'USDC', name: 'USD Coin', decimals: 6, logo: 'https://assets.coingecko.com/coins/images/6319/large/USD_Coin_icon.png' },
-  { symbol: 'USDT', name: 'Tether', decimals: 6, logo: 'https://assets.coingecko.com/coins/images/325/large/Tether.png' }
-];
-
-// Comprehensive perpetual market data for BTC and ETH across all DEXs
-const MARKET_DATA = {
-  bitcoin: {
-    symbol: 'BTC',
-    name: 'Bitcoin',
-    description: 'Digital currency and payment system',
-    logo: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png',
-    price: 'Loading...',
-    priceChange: 'Loading...',
-    color: 'from-orange-500/10 to-yellow-500/10',
-    borderColor: 'border-orange-500/20',
-    // Market data
-    marketCap: 'Loading...',
-    dominance: 'Loading...',
-    volatility: 'Loading...',
-    // DEX-specific data
-    dexes: {
-      hyperliquid: {
-        name: 'Hyperliquid',
-        logo: 'https://hyperliquid.gitbook.io/hyperliquid-docs/~gitbook/image?url=https%3A%2F%2F2356094849-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FyUdp569E6w18GdfqlGvJ%252Ficon%252FsIAjqhKKIUysM08ahKPh%252FHL-logoSwitchDISliStat.png%3Falt%3Dmedia%26token%3Da81fa25c-0510-4d97-87ff-3fb8944935b1&width=32&dpr=4&quality=100&sign=3e1219e3&sv=2',
-        fundingRate: -0.0001,
-        liquidity: '$1.2B',
-        volume24h: '$680M',
-        openInterest: '$450M',
-        longShortRatio: '52.3% / 47.7%',
-        maxLeverage: '100x',
-        makerFee: '0.02%',
-        takerFee: '0.05%',
-        minOrderSize: '0.001 BTC',
-        tickSize: '0.01',
-        nextFunding: '2h 15m',
-        openInterestChange: '+12.4%',
-        volumeChange: '+8.7%',
-        liquidations24h: '$25M',
-        topTraders: '1,847',
-        avgPositionSize: '$15,500',
-        isBestFunding: true,
-        isBestLiquidity: true
-      },
-      aster: {
-        name: 'Aster',
-        logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/36341.png',
-        fundingRate: 0.0002,
-        liquidity: '$800M',
-        volume24h: '$420M',
-        openInterest: '$280M',
-        longShortRatio: '48.1% / 51.9%',
-        maxLeverage: '50x',
-        makerFee: '0.025%',
-        takerFee: '0.06%',
-        minOrderSize: '0.01 BTC',
-        tickSize: '0.1',
-        nextFunding: '1h 45m',
-        openInterestChange: '+8.9%',
-        volumeChange: '+5.2%',
-        liquidations24h: '$15M',
-        topTraders: '1,123',
-        avgPositionSize: '$9,750',
-        isBestFunding: false,
-        isBestLiquidity: false
-      },
-      lighter: {
-        name: 'Lighter',
-        logo: 'https://framerusercontent.com/images/k22lnUP5Ao1xIheAoknaPGmdjXk.svg?width=14&height=26',
-        fundingRate: -0.0003,
-        liquidity: '$400M',
-        volume24h: '$200M',
-        openInterest: '$120M',
-        longShortRatio: '55.2% / 44.8%',
-        maxLeverage: '75x',
-        makerFee: '0.015%',
-        takerFee: '0.04%',
-        minOrderSize: '0.005 BTC',
-        tickSize: '0.05',
-        nextFunding: '3h 30m',
-        openInterestChange: '+15.8%',
-        volumeChange: '+12.3%',
-        liquidations24h: '$5M',
-        topTraders: '456',
-        avgPositionSize: '$6,250',
-        isBestFunding: true,
-        isBestLiquidity: false
-      }
-    }
-  },
-  ethereum: {
-    symbol: 'ETH', 
-    name: 'Ethereum',
-    description: 'Decentralized platform for smart contracts',
-    logo: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png',
-    price: 'Loading...',
-    priceChange: 'Loading...',
-    color: 'from-blue-500/10 to-purple-500/10',
-    borderColor: 'border-blue-500/20',
-    // Market data
-    marketCap: 'Loading...',
-    dominance: 'Loading...',
-    volatility: 'Loading...',
-    // DEX-specific data
-    dexes: {
-      hyperliquid: {
-        name: 'Hyperliquid',
-        logo: 'https://hyperliquid.gitbook.io/hyperliquid-docs/~gitbook/image?url=https%3A%2F%2F2356094849-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FyUdp569E6w18GdfqlGvJ%252Ficon%252FsIAjqhKKIUysM08ahKPh%252FHL-logoSwitchDISliStat.png%3Falt%3Dmedia%26token%3Da81fa25c-0510-4d97-87ff-3fb8944935b1&width=32&dpr=4&quality=100&sign=3e1219e3&sv=2',
-        fundingRate: 0.0003,
-        liquidity: '$900M',
-        volume24h: '$475M',
-        openInterest: '$310M',
-        longShortRatio: '48.1% / 51.9%',
-        maxLeverage: '50x',
-        makerFee: '0.025%',
-        takerFee: '0.06%',
-        minOrderSize: '0.01 ETH',
-        tickSize: '0.1',
-        nextFunding: '1h 45m',
-        openInterestChange: '+8.9%',
-        volumeChange: '+5.2%',
-        liquidations24h: '$14M',
-        topTraders: '961',
-        avgPositionSize: '$4,375',
-        isBestFunding: false,
-        isBestLiquidity: true
-      },
-      aster: {
-        name: 'Aster',
-        logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/36341.png',
-        fundingRate: -0.0001,
-        liquidity: '$600M',
-        volume24h: '$300M',
-        openInterest: '$200M',
-        longShortRatio: '51.2% / 48.8%',
-        maxLeverage: '40x',
-        makerFee: '0.03%',
-        takerFee: '0.07%',
-        minOrderSize: '0.05 ETH',
-        tickSize: '0.2',
-        nextFunding: '2h 30m',
-        openInterestChange: '+6.4%',
-        volumeChange: '+3.8%',
-        liquidations24h: '$8M',
-        topTraders: '623',
-        avgPositionSize: '$3,250',
-        isBestFunding: true,
-        isBestLiquidity: false
-      },
-      lighter: {
-        name: 'Lighter',
-        logo: 'https://framerusercontent.com/images/k22lnUP5Ao1xIheAoknaPGmdjXk.svg?width=14&height=26',
-        fundingRate: 0.0001,
-        liquidity: '$300M',
-        volume24h: '$175M',
-        openInterest: '$110M',
-        longShortRatio: '49.8% / 50.2%',
-        maxLeverage: '60x',
-        makerFee: '0.02%',
-        takerFee: '0.05%',
-        minOrderSize: '0.02 ETH',
-        tickSize: '0.1',
-        nextFunding: '4h 15m',
-        openInterestChange: '+11.2%',
-        volumeChange: '+7.9%',
-        liquidations24h: '$6M',
-        topTraders: '339',
-        avgPositionSize: '$2,875',
-        isBestFunding: false,
-        isBestLiquidity: false
-      }
-    }
-  }
-};
 
 export const PerpPortPage: React.FC = () => {
   const { sdk, isSdkInitialized } = useNexus();
@@ -523,10 +303,13 @@ export const PerpPortPage: React.FC = () => {
                   {DEXES.map((dex) => (
                     <button
                       key={dex.id}
-                      onClick={() => setSelectedDEX(dex)}
-                      className={`p-4 rounded-xl border transition-all duration-300 backdrop-blur-xl ${
+                       onClick={() => dex.id !== 'lighter' && setSelectedDEX(dex)}
+                       disabled={dex.id === 'lighter'}
+                       className={`p-4 rounded-xl border transition-all duration-300 backdrop-blur-xl relative ${
                         selectedDEX.id === dex.id
                           ? 'border-white/50 bg-white/10 shadow-lg shadow-white/20 scale-105'
+                           : dex.id === 'lighter'
+                           ? 'border-gray-500/30 bg-gray-500/10 opacity-60 cursor-not-allowed'
                           : 'border-white/20 bg-black/40 hover:border-white/30 hover:bg-black/50 hover:scale-102'
                       }`}
                     >
@@ -537,6 +320,11 @@ export const PerpPortPage: React.FC = () => {
                             <div className="text-sm text-gray-400">{dex.description}</div>
                           </div>
                         </div>
+                       {dex.id === 'lighter' && (
+                         <div className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-yellow-500 text-black text-xs font-bold px-2 py-1 rounded-full shadow-lg animate-pulse">
+                           Coming Soon
+                         </div>
+                       )}
                     </button>
                   ))}
                 </div>
@@ -719,270 +507,35 @@ export const PerpPortPage: React.FC = () => {
       </button>
 
       {/* Market Data Dialog */}
-      {isMarketDialogOpen && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-lg flex items-center justify-center z-50 p-4">
-          <div className="bg-black/30 backdrop-blur-3xl border border-white/20 rounded-3xl p-8 max-w-6xl w-full max-h-[80vh] overflow-y-auto shadow-2xl ring-1 ring-white/10 relative">
-            <button
-              onClick={() => setIsMarketDialogOpen(false)}
-              className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-xl transition-all duration-300 backdrop-blur-xl border border-white/10 z-10"
-            >
-              <X className="w-4 h-4 text-gray-300" />
-            </button>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {Object.entries(MARKET_DATA).map(([key, asset]) => {
-                const assetSymbol = asset.symbol;
-                const realTimeData = fundingData[assetSymbol];
-                const bestRate = bestRates[assetSymbol];
-                
-                // Map asset symbols to Aster API symbols
-                const asterSymbol = assetSymbol === 'BTC' ? 'BTCUSDT' : 'ETHUSDT';
-                const asterRealTimeData = asterFundingData[asterSymbol];
-                const asterBestRate = asterBestRates[asterSymbol];
-                
-                // Reya data uses direct asset symbols
-                const reyaRealTimeData = reyaFundingData[assetSymbol];
-                const reyaBestRate = reyaBestRates[assetSymbol];
-                
-                return (
-                <div key={key} className="bg-black/10 backdrop-blur-2xl border border-white/10 rounded-2xl p-6 shadow-2xl ring-1 ring-white/5">
-                  {/* Asset Header */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <img src={asset.logo} alt={asset.name} className="w-8 h-8 rounded-full border border-white/20 shadow-md" />
-                      <div>
-                        <h3 className="text-lg font-bold text-white">{asset.name}</h3>
-                        <p className="text-xs text-gray-400">{asset.description}</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-end gap-1">
-                      <div className="text-right">
-                        <p className="text-xl font-bold text-white">
-                          {asterRealTimeData ? `$${asterRealTimeData.markPrice.toLocaleString()}` : 'Loading...'}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                    {/* Real-time Hyperliquid Data */}
-                    {realTimeData && realTimeData.HlPerp ? (
-                      <div className="mb-6 p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-xl">
-                        <div className="flex items-center gap-2 mb-3">
-                          <img src="https://hyperliquid.gitbook.io/hyperliquid-docs/~gitbook/image?url=https%3A%2F%2F2356094849-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FyUdp569E6w18GdfqlGvJ%252Ficon%252FsIAjqhKKIUysM08ahKPh%252FHL-logoSwitchDISliStat.png%3Falt%3Dmedia%26token%3Da81fa25c-0510-4d97-87ff-3fb8944935b1&width=32&dpr=4&quality=100&sign=3e1219e3&sv=2" alt="Hyperliquid" className="w-6 h-6 rounded-full" />
-                          <span className="font-semibold text-white">Hyperliquid</span>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Funding Rate:</span>
-                              <span className={`font-bold text-sm ${getFundingRateColor(realTimeData.HlPerp.fundingRate)}`}>
-                                {realTimeData.HlPerp.formattedRate}
-                              </span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Next Funding:</span>
-                              <span className="text-white font-bold text-sm">
-                                {realTimeData.HlPerp.nextFundingInHours}h
-                              </span>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Interval:</span>
-                              <span className="text-white font-bold text-sm">
-                                {realTimeData.HlPerp.fundingIntervalHours}h
-                              </span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Status:</span>
-                              <span className={`text-xs px-2 py-1 rounded-full ${realTimeData.HlPerp.isPositive ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
-                                {realTimeData.HlPerp.isPositive ? 'Longs Pay' : 'Shorts Pay'}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="mb-6 p-4 bg-gray-500/10 border border-gray-500/20 rounded-xl">
-                        <div className="flex items-center justify-between">
-                          <span className="text-gray-400 text-sm">Real-time data unavailable</span>
-                          {hyperliquidError && (
-                            <span className="text-red-400 text-xs">{hyperliquidError}</span>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    
-                    {/* Real-time Aster Data */}
-                    {asterRealTimeData ? (
-                      <div className="mb-6 p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl">
-                        <div className="flex items-center gap-2 mb-3">
-                          <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/36341.png" alt="Aster" className="w-6 h-6 rounded-full" />
-                          <span className="font-semibold text-white">Aster</span>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Funding Rate:</span>
-                              <span className={`font-bold text-sm ${getAsterFundingRateColor(asterRealTimeData.fundingRate)}`}>
-                                {asterRealTimeData.formattedRate}
-                              </span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Mark Price:</span>
-                              <span className="text-white font-bold text-sm">
-                                ${asterRealTimeData.markPrice.toLocaleString()}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Index Price:</span>
-                              <span className="text-white font-bold text-sm">
-                                ${asterRealTimeData.indexPrice.toLocaleString()}
-                              </span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Next Funding:</span>
-                              <span className="text-white font-bold text-sm">
-                                {asterRealTimeData.nextFundingInHours}h
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="mb-6 p-4 bg-gray-500/10 border border-gray-500/20 rounded-xl">
-                        <div className="flex items-center justify-between">
-                          <span className="text-gray-400 text-sm">Aster real-time data unavailable</span>
-                          {asterError && (
-                            <span className="text-red-400 text-xs">{asterError}</span>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    
-                    {/* Real-time Reya Data */}
-                    {reyaRealTimeData ? (
-                      <div className="mb-6 p-4 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border border-indigo-500/20 rounded-xl">
-                        <div className="flex items-center gap-2 mb-3">
-                          <img src="https://cdn.prod.website-files.com/66b5e4e47712e879f0c5ef1b/686bcf104a9c1d2d2c69c5da_r.svg" alt="Reya" className="w-6 h-6" />
-                          <span className="font-semibold text-white">Reya</span>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Funding Rate:</span>
-                              <span className={`font-bold text-sm ${getReyaFundingRateColor(reyaRealTimeData.fundingRate)}`}>
-                                {reyaRealTimeData.formattedRate}
-                              </span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Symbol:</span>
-                              <span className="text-white font-bold text-sm">
-                                {reyaRealTimeData.symbol}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Next Funding:</span>
-                              <span className="text-white font-bold text-sm">
-                                {reyaRealTimeData.nextFundingInHours}h
-                              </span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400 text-sm">Status:</span>
-                              <span className={`text-xs px-2 py-1 rounded-full ${reyaRealTimeData.isPositive ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}`}>
-                                {reyaRealTimeData.isPositive ? 'Longs Pay' : 'Shorts Pay'}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="mb-6 p-4 bg-gray-500/10 border border-gray-500/20 rounded-xl">
-                        <div className="flex items-center justify-between">
-                          <span className="text-gray-400 text-sm">Reya real-time data unavailable</span>
-                          {reyaError && (
-                            <span className="text-red-400 text-xs">{reyaError}</span>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                    
-                </div>
-                );
-              })}
-            </div>
-            
-            <div className="mt-6 space-y-4">
-              {/* Data Status - All DEXes in One Line */}
-              <div className="p-3 bg-black/20 border border-white/10 rounded-xl">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-6">
-                    {/* Hyperliquid Status */}
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${isHyperliquidLoading ? 'bg-yellow-400 animate-pulse' : hyperliquidError ? 'bg-red-400' : 'bg-green-400'}`}></div>
-                      <span className="text-sm text-gray-300">
-                        Hyperliquid: {isHyperliquidLoading ? 'Loading...' : hyperliquidError ? `Error` : 'Connected'}
-                      </span>
-                    </div>
-                    
-                    {/* Aster Status */}
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${isAsterLoading ? 'bg-yellow-400 animate-pulse' : asterError ? 'bg-red-400' : 'bg-green-400'}`}></div>
-                      <span className="text-sm text-gray-300">
-                        Aster: {isAsterLoading ? 'Loading...' : asterError ? `Error` : 'Connected'}
-                      </span>
-                    </div>
-                    
-                    {/* Reya Status */}
-                    <div className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${isReyaLoading ? 'bg-yellow-400 animate-pulse' : reyaError ? 'bg-red-400' : 'bg-green-400'}`}></div>
-                      <span className="text-sm text-gray-300">
-                        Reya: {isReyaLoading ? 'Loading...' : reyaError ? `Error` : 'Connected'}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  {/* Refresh All Button and Last Updated Time */}
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => {
-                        refreshData();
-                        refreshAsterData();
-                        refreshReyaData();
-                      }}
-                      disabled={isHyperliquidLoading || isAsterLoading || isReyaLoading}
-                      className="p-1.5 bg-black/40 backdrop-blur-xl border border-white/20 hover:border-white/30 rounded-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg hover:bg-black/50"
-                      title={isHyperliquidLoading || isAsterLoading || isReyaLoading ? 'Refreshing...' : 'Refresh All'}
-                    >
-                      <svg className={`w-3.5 h-3.5 text-white ${isHyperliquidLoading || isAsterLoading || isReyaLoading ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                      </svg>
-                    </button>
-                    <div className="text-xs text-gray-400">
-                      {lastUpdated && `Last updated: ${lastUpdated.toLocaleTimeString()}`}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Pro Tip */}
-              <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-              <p className="text-blue-300 text-sm text-center">
-                💡 <strong>Pro Tip:</strong> Negative funding rates mean longs pay shorts (bullish sentiment). 
-                Choose the DEX with the best rates for your position!
-              </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <MarketDataDialog
+        isOpen={isMarketDialogOpen}
+        onClose={() => setIsMarketDialogOpen(false)}
+        selectedDEX={selectedDEX}
+        onDEXSelect={setSelectedDEX}
+        DEXES={DEXES}
+        MARKET_DATA={MARKET_DATA}
+        // Hyperliquid data
+        hyperliquidData={fundingData}
+        hyperliquidBestRates={bestRates}
+        isHyperliquidLoading={isHyperliquidLoading}
+        hyperliquidError={hyperliquidError}
+        hyperliquidLastUpdated={lastUpdated}
+        onRefreshHyperliquid={refreshData}
+        // Aster data
+        asterData={asterFundingData}
+        asterBestRates={asterBestRates}
+        isAsterLoading={isAsterLoading}
+        asterError={asterError}
+        asterLastUpdated={asterLastUpdated}
+        onRefreshAster={refreshAsterData}
+        // Reya data
+        reyaData={reyaFundingData}
+        reyaBestRates={reyaBestRates}
+        isReyaLoading={isReyaLoading}
+        reyaError={reyaError}
+        reyaLastUpdated={reyaLastUpdated}
+        onRefreshReya={refreshReyaData}
+      />
 
       {/* Success Dialog */}
       {showSuccessDialog && (

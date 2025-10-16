@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { SUPPORTED_CHAINS } from '../constants/chains';
+import { CHAINS } from '../constants/chains';
 import type { Chain } from '../types';
 
 export const useChains = () => {
-  const chains = useMemo(() => SUPPORTED_CHAINS, []);
+  const chains = useMemo(() => CHAINS, []);
   
   const getChainById = (chainId: number): Chain | undefined => {
     return chains.find(chain => chain.id === chainId);
