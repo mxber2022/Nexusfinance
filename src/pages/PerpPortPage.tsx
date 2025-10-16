@@ -70,6 +70,7 @@ const MARKET_DATA = {
   bitcoin: {
     symbol: 'BTC',
     name: 'Bitcoin',
+    description: 'Digital currency and payment system',
     logo: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png',
     price: 'Loading...',
     priceChange: 'Loading...',
@@ -152,6 +153,7 @@ const MARKET_DATA = {
   ethereum: {
     symbol: 'ETH', 
     name: 'Ethereum',
+    description: 'Decentralized platform for smart contracts',
     logo: 'https://assets.coingecko.com/coins/images/279/large/ethereum.png',
     price: 'Loading...',
     priceChange: 'Loading...',
@@ -747,16 +749,19 @@ export const PerpPortPage: React.FC = () => {
                   {/* Asset Header */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <img src={asset.logo} alt={asset.name} className="w-8 h-8 rounded-full" />
-                        <div>
-                          <p className="text-lg text-white font-bold">
-                            {asterRealTimeData ? `$${asterRealTimeData.markPrice.toLocaleString()}` : 'Loading...'}
-                          </p>
-                          <p className="text-sm text-gray-400">{asset.name}</p>
+                      <img src={asset.logo} alt={asset.name} className="w-8 h-8 rounded-full border border-white/20 shadow-md" />
+                      <div>
+                        <h3 className="text-lg font-bold text-white">{asset.name}</h3>
+                        <p className="text-xs text-gray-400">{asset.description}</p>
+                      </div>
                     </div>
+                    <div className="flex flex-col items-end gap-1">
+                      <div className="text-right">
+                        <p className="text-xl font-bold text-white">
+                          {asterRealTimeData ? `$${asterRealTimeData.markPrice.toLocaleString()}` : 'Loading...'}
+                        </p>
                       </div>
-                      <div className="flex flex-col items-end gap-2">
-                      </div>
+                    </div>
                   </div>
                   
                     {/* Real-time Hyperliquid Data */}
