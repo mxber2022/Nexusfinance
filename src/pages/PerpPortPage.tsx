@@ -223,7 +223,7 @@ export const PerpPortPage: React.FC = () => {
   const { isConnected } = useAccount();
   const { open } = useAppKit();
   const { address: account } = useAppKitAccount();
-  const { depositToHyperliquid, isDepositing: isHyperliquidDepositing, checkNetwork, switchToArbitrum } = useHyperliquid(true); // Using mainnet
+  const { depositToHyperliquid, withdrawFromHyperliquid, isDepositing: isHyperliquidDepositing, isWithdrawing: isHyperliquidWithdrawing, checkNetwork, switchToArbitrum } = useHyperliquid(true); // Using mainnet
   const { depositToAster, isDepositing: isAsterDepositing } = useAster(true); // Using mainnet
 
   const [selectedDEX, setSelectedDEX] = useState(DEXES[0]);
@@ -249,6 +249,12 @@ export const PerpPortPage: React.FC = () => {
   
   // Withdrawal state
   const [isWithdrawing, setIsWithdrawing] = useState(false);
+  const [withdrawalStatus, setWithdrawalStatus] = useState<'idle' | 'processing' | 'success' | 'error'>('idle');
+  const [withdrawalTxHash, setWithdrawalTxHash] = useState('');
+  const [withdrawalError, setWithdrawalError] = useState('');
+  const [withdrawalAmount, setWithdrawalAmount] = useState('');
+  const [withdrawalDestination, setWithdrawalDestination] = useState('');
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   // Simulate bridge transaction for cost preview
   const simulateBridge = async () => {
@@ -433,18 +439,25 @@ export const PerpPortPage: React.FC = () => {
     setError('');
 
     try {
-      // For now, we'll show a placeholder message
-      // In a real implementation, you would call the Hyperliquid withdrawal API
-      console.log('Withdrawal requested:', {
-        amount: amount,
-        user: account,
-        dex: selectedDEX.name
-      });
+      let withdrawalResult;
 
-      // Simulate withdrawal processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      alert(`Withdrawal of ${amount} USDC from ${selectedDEX.name} initiated. Please check your Hyperliquid account.`);
+      if (selectedDEX.id === 'hyperliquid') {
+        // Withdraw from Hyperliquid using EIP-712 signature
+        console.log('Withdrawing from Hyperliquid...');
+        withdrawalResult = await withdrawFromHyperliquid(amount, account);
+        
+        if (withdrawalResult.success) {
+          setWithdrawalStatus('success');
+          setWithdrawalTxHash(withdrawalResult.txHash || '');
+          setShowSuccessDialog(true);
+        } else {
+          setWithdrawalStatus('error');
+          setWithdrawalError(withdrawalResult.error || 'Withdrawal failed');
+        }
+      } else {
+        setWithdrawalStatus('error');
+        setWithdrawalError('Withdrawal not supported for this DEX');
+      }
       
     } catch (error) {
       console.error('Withdrawal error:', error);
@@ -628,18 +641,18 @@ export const PerpPortPage: React.FC = () => {
                 {/* Withdrawal Button */}
                 <button
                   onClick={handleWithdrawal}
-                  disabled={isWithdrawing || !isConnected || !amount}
+                  disabled={isWithdrawing || isHyperliquidWithdrawing || !isConnected || !amount}
                   className="py-4 px-6 backdrop-blur-3xl border text-white focus:ring-white/20 shadow-2xl hover:shadow-3xl transition-all duration-500 rounded-xl font-semibold text-base disabled:opacity-50 disabled:cursor-not-allowed ring-1 ring-white/20 hover:ring-white/30 hover:scale-[1.02] active:scale-[0.98] group bg-red-500/10 border-red-500/30 hover:bg-red-500/20"
                 >
-                  {isWithdrawing ? (
+                  {(isWithdrawing || isHyperliquidWithdrawing) ? (
                     <div className="flex items-center justify-center space-x-2">
                       <div className="w-4 h-4 border-2 border-red-300/30 border-t-red-300 rounded-full animate-spin"></div>
-                      <span>Processing...</span>
+                      <span>Creating Withdrawal Signature...</span>
                     </div>
                   ) : (
                     <div className="flex items-center justify-center space-x-2">
                       <Download className="h-4 w-4" />
-                      <span>Withdraw</span>
+                      <span>Withdraw from Hyperliquid</span>
                     </div>
                   )}
                 </button>
@@ -771,6 +784,85 @@ export const PerpPortPage: React.FC = () => {
                 💡 <strong>Pro Tip:</strong> Negative funding rates mean longs pay shorts (bullish sentiment). 
                 Choose the DEX with the best rates for your position!
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Dialog */}
+      {showSuccessDialog && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-white/20 rounded-2xl p-8 max-w-2xl w-full mx-4 shadow-2xl animate-fadeIn backdrop-blur-xl">
+            {/* Success Icon with Animation */}
+            <div className="text-center mb-8">
+              <div className="mx-auto w-24 h-24 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mb-6 shadow-lg animate-bounce">
+                <svg className="w-12 h-12 text-white animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              
+              {/* Success Message */}
+              <h3 className="text-3xl font-bold text-white mb-4">
+                Withdrawal Signature Created! 🎉
+              </h3>
+              <p className="text-gray-400 text-sm leading-relaxed max-w-lg mx-auto">
+                Your EIP-712 signature has been generated successfully. You can now submit this to Hyperliquid to complete your withdrawal.
+              </p>
+            </div>
+            
+            {/* Signature Details */}
+            <div className="bg-black/30 border border-green-500/20 rounded-xl p-6 mb-8">
+              <div className="text-left">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-base font-semibold text-green-400">Signature Hash</span>
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      navigator.clipboard.writeText(withdrawalTxHash);
+                      // Show brief copy feedback
+                      const btn = e.target as HTMLButtonElement;
+                      const originalText = btn.textContent;
+                      btn.textContent = '✓ Copied!';
+                      btn.className = 'text-sm text-green-400 font-medium px-3 py-1.5 rounded-lg bg-green-500/20 border border-green-500/30 transition-all duration-200';
+                      setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.className = 'text-sm text-gray-400 hover:text-white transition-colors px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10';
+                      }, 2000);
+                    }}
+                    className="text-sm text-gray-400 hover:text-white transition-colors px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:scale-105 active:scale-95"
+                  >
+                    Copy
+                  </button>
+                </div>
+                <div className="font-mono text-sm text-gray-300 break-all bg-black/40 p-4 rounded-lg border border-white/10 backdrop-blur-sm">
+                  {withdrawalTxHash}
+                </div>
+              </div>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => {
+                  setShowSuccessDialog(false);
+                  setWithdrawalStatus('idle');
+                  setWithdrawalTxHash('');
+                  setAmount('');
+                }}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-xl border border-green-400/30 text-green-100 font-semibold rounded-xl hover:from-green-500/30 hover:to-emerald-500/30 hover:border-green-300/50 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-green-500/10 to-emerald-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <span className="relative z-10">Create Another Withdrawal</span>
+              </button>
+              <button
+                onClick={() => setShowSuccessDialog(false)}
+                className="flex-1 px-6 py-3 bg-white/5 backdrop-blur-xl border border-white/20 text-white font-semibold rounded-xl hover:bg-white/10 hover:border-white/30 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden group"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <span className="relative z-10">Close</span>
+              </button>
             </div>
           </div>
         </div>

@@ -9,7 +9,13 @@ export interface UseHyperliquidReturn {
     txHash?: string;
     error?: string;
   }>;
+  withdrawFromHyperliquid: (amount: string, destination: string) => Promise<{
+    success: boolean;
+    txHash?: string;
+    error?: string;
+  }>;
   isDepositing: boolean;
+  isWithdrawing: boolean;
   checkNetwork: () => Promise<boolean>;
   switchToArbitrum: () => Promise<boolean>;
   checkUSDCBalance: (userAddress: string) => Promise<{
@@ -23,6 +29,7 @@ export const useHyperliquid = (isMainnet: boolean = true): UseHyperliquidReturn 
   const { address } = useAccount();
   const { data: walletClient } = useWalletClient();
   const [isDepositing, setIsDepositing] = useState(false);
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   const depositToHyperliquid = useCallback(async (amount: string) => {
     if (!walletClient || !address) {
@@ -74,6 +81,101 @@ export const useHyperliquid = (isMainnet: boolean = true): UseHyperliquidReturn 
       };
     } finally {
       setIsDepositing(false);
+    }
+  }, [walletClient, address, isMainnet]);
+
+  const withdrawFromHyperliquid = useCallback(async (amount: string, destination: string) => {
+    if (!walletClient || !address) {
+      return {
+        success: false,
+        error: 'Wallet not connected'
+      };
+    }
+
+    setIsWithdrawing(true);
+
+    try {
+      // Create provider and signer from wallet client
+      const provider = new ethers.BrowserProvider(walletClient);
+      const signer = await provider.getSigner();
+      
+      // Check if user is on correct network
+      const hyperliquidService = new HyperliquidService(provider, signer);
+      const isCorrectNetwork = await hyperliquidService.checkNetwork();
+      if (!isCorrectNetwork) {
+        const switched = await hyperliquidService.switchToArbitrum();
+        if (!switched) {
+          return {
+            success: false,
+            error: 'Please switch to Arbitrum network'
+          };
+        }
+      }
+
+      // Create EIP-712 signature for withdrawal
+      const domain = {
+        name: "HyperliquidSignTransaction",
+        version: "1",
+        chainId: 42161,
+        verifyingContract: "0x0000000000000000000000000000000000000000" as `0x${string}`
+      };
+
+      const message = {
+        destination: destination,
+        amount: amount,
+        time: Math.floor(Date.now() / 1000),
+        type: "withdraw3",
+        signatureChainId: "0xa4b1", // 42161 in hex
+        hyperliquidChain: "Mainnet"
+      };
+
+      const types = {
+        EIP712Domain: [
+          { name: "name", type: "string" },
+          { name: "version", type: "string" },
+          { name: "chainId", type: "uint256" },
+          { name: "verifyingContract", type: "address" }
+        ],
+        "HyperliquidTransaction:Withdraw": [
+          { name: "hyperliquidChain", type: "string" },
+          { name: "destination", type: "string" },
+          { name: "amount", type: "string" },
+          { name: "time", type: "uint64" }
+        ]
+      };
+
+      console.log('Creating withdrawal signature:', {
+        domain,
+        message,
+        types
+      });
+
+      // Sign the EIP-712 message
+      const signature = await walletClient.signTypedData({
+        domain: domain as any,
+        types: types as any,
+        primaryType: "HyperliquidTransaction:Withdraw",
+        message: message as any
+      });
+
+      console.log('Withdrawal signature created:', signature);
+
+      // For now, we'll return success with the signature
+      // In a full implementation, you would send this to Hyperliquid's API
+      return {
+        success: true,
+        txHash: signature,
+        error: undefined
+      };
+
+    } catch (error) {
+      console.error('Hyperliquid withdrawal error:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error occurred'
+      };
+    } finally {
+      setIsWithdrawing(false);
     }
   }, [walletClient, address, isMainnet]);
 
@@ -132,7 +234,9 @@ export const useHyperliquid = (isMainnet: boolean = true): UseHyperliquidReturn 
 
   return {
     depositToHyperliquid,
+    withdrawFromHyperliquid,
     isDepositing,
+    isWithdrawing,
     checkNetwork,
     switchToArbitrum,
     checkUSDCBalance
