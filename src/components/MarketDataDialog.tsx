@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { getFundingRateColor, getFundingRateBgColor } from '../services/hyperliquidApi';
 import { getAsterFundingRateColor, getAsterFundingRateBgColor } from '../services/asterApi';
@@ -95,6 +95,11 @@ export const MarketDataDialog: React.FC<MarketDataDialogProps> = ({
   reyaLastUpdated,
   onRefreshReya,
 }) => {
+  const [isPositionDialogOpen, setIsPositionDialogOpen] = useState(false);
+  const [positionType, setPositionType] = useState<'long' | 'short'>('long');
+  const [leverage, setLeverage] = useState<string>('10');
+  const [size, setSize] = useState<string>('100');
+
   if (!isOpen) return null;
 
   const handleRefreshAll = () => {
@@ -152,35 +157,49 @@ export const MarketDataDialog: React.FC<MarketDataDialogProps> = ({
                 </div>
                 
                 {/* Position Selection and Action Buttons */}
-                <div className="mb-6 p-4 bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl">
-                  <div className="flex items-center justify-between mb-4">
+                <div className="mb-6 p-6 bg-black/20 backdrop-blur-xl border border-white/10 rounded-xl">
+                  {/* Header Section */}
+                  <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h4 className="text-lg font-semibold text-white">Open Position</h4>
-                      <p className="text-xs text-gray-400 mt-1">Selected DEX: <span className="text-white font-medium">{selectedDEX.name}</span></p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm text-gray-400">Position:</span>
-                      <div className="flex bg-black/40 rounded-lg p-1">
-                        <button className="px-3 py-1 text-xs font-medium rounded-md bg-green-500/20 text-green-400 border border-green-500/30">
-                          Long
-                        </button>
-                        <button className="px-3 py-1 text-xs font-medium rounded-md text-gray-400 hover:text-white transition-colors">
-                          Short
-                        </button>
+                      <h4 className="text-xl font-bold text-white mb-1">Open Position</h4>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-gray-400">Selected DEX:</span>
+                        <div className="flex items-center gap-2 px-3 py-1 bg-white/10 rounded-lg border border-white/20">
+                          <img src={selectedDEX.logo} alt={selectedDEX.name} className="w-4 h-4 rounded-full" />
+                          <span className="text-white font-semibold text-sm">{selectedDEX.name}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                   
+                  
+                  {/* Action Buttons */}
                   <div className="grid grid-cols-2 gap-3">
-                    <button className="p-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-lg hover:from-green-500/30 hover:to-emerald-500/30 transition-all duration-300 group">
-                      <div className="flex items-center justify-center space-x-2">
-                        <span className="text-green-400 font-semibold text-sm">Open Long</span>
+                    <button 
+                      onClick={() => {
+                        setPositionType('long');
+                        setIsPositionDialogOpen(true);
+                      }}
+                      className="p-3 bg-black/40 backdrop-blur-xl border border-white/20 rounded-lg hover:bg-black/50 hover:border-white/30 hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 group relative overflow-hidden"
+                    >
+                      {/* Subtle green glow on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-green-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="relative z-10 flex items-center justify-center space-x-2">
+                        <span className="text-white font-semibold text-sm group-hover:text-green-400 transition-colors duration-300">Buy/Long</span>
                       </div>
                     </button>
                     
-                    <button className="p-3 bg-gradient-to-r from-red-500/20 to-pink-500/20 border border-red-500/30 rounded-lg hover:from-red-500/30 hover:to-pink-500/30 transition-all duration-300 group">
-                      <div className="flex items-center justify-center space-x-2">
-                        <span className="text-red-400 font-semibold text-sm">Open Short</span>
+                    <button 
+                      onClick={() => {
+                        setPositionType('short');
+                        setIsPositionDialogOpen(true);
+                      }}
+                      className="p-3 bg-black/40 backdrop-blur-xl border border-white/20 rounded-lg hover:bg-black/50 hover:border-white/30 hover:shadow-lg hover:shadow-red-500/20 transition-all duration-300 group relative overflow-hidden"
+                    >
+                      {/* Subtle red glow on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-red-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="relative z-10 flex items-center justify-center space-x-2">
+                        <span className="text-white font-semibold text-sm group-hover:text-red-400 transition-colors duration-300">Sell/Short</span>
                       </div>
                     </button>
                   </div>
@@ -418,6 +437,117 @@ export const MarketDataDialog: React.FC<MarketDataDialogProps> = ({
         reyaLastUpdated={reyaLastUpdated}
         onRefreshReya={onRefreshReya}
       />
+
+      {/* Position Configuration Dialog */}
+      {isPositionDialogOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-black/40 backdrop-blur-xl border border-white/20 rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-xl font-bold text-white">
+                  {positionType === 'long' ? 'Buy/Long' : 'Sell/Short'} Position
+                </h3>
+                <p className="text-sm text-gray-400 mt-1">
+                  Configure your {positionType} position on {selectedDEX.name}
+                </p>
+              </div>
+              <button
+                onClick={() => setIsPositionDialogOpen(false)}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors duration-200"
+              >
+                <X className="w-5 h-5 text-gray-400" />
+              </button>
+            </div>
+
+            {/* Position Configuration */}
+            <div className="space-y-4">
+              {/* Leverage Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Leverage</label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={leverage}
+                    onChange={(e) => setLeverage(e.target.value)}
+                    placeholder="10"
+                    className="w-full px-4 py-3 bg-black/30 backdrop-blur-xl border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-white/40 focus:outline-none transition-all duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  />
+                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm">x</div>
+                </div>
+              </div>
+
+              {/* Size Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Position Size (USDC)</label>
+                <input
+                  type="number"
+                  value={size}
+                  onChange={(e) => setSize(e.target.value)}
+                  placeholder="100"
+                  className="w-full px-4 py-3 bg-black/30 backdrop-blur-xl border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-white/40 focus:outline-none transition-all duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
+              </div>
+
+              {/* Position Summary */}
+              <div className="p-4 bg-black/20 border border-white/10 rounded-lg">
+                <h4 className="text-sm font-semibold text-white mb-2">Position Summary</h4>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Type:</span>
+                    <span className={`font-medium ${positionType === 'long' ? 'text-green-400' : 'text-red-400'}`}>
+                      {positionType === 'long' ? 'Long' : 'Short'}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Leverage:</span>
+                    <span className="text-white">{leverage}x</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Size:</span>
+                    <span className="text-white">{size} USDC</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Notional Value:</span>
+                    <span className="text-white font-semibold">
+                      {(parseFloat(size) * parseFloat(leverage)).toFixed(2)} USDC
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4">
+                <button
+                  onClick={() => setIsPositionDialogOpen(false)}
+                  className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white hover:bg-white/20 transition-all duration-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    // Here you would implement the actual position opening logic
+                    console.log('Opening position:', {
+                      type: positionType,
+                      leverage: leverage,
+                      size: size,
+                      dex: selectedDEX.name
+                    });
+                    setIsPositionDialogOpen(false);
+                  }}
+                  className={`flex-1 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                    positionType === 'long'
+                      ? 'bg-green-500/20 border border-green-500/30 text-green-400 hover:bg-green-500/30'
+                      : 'bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30'
+                  }`}
+                >
+                  {positionType === 'long' ? 'Open Long Position' : 'Open Short Position'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
