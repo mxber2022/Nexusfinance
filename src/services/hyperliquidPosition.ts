@@ -216,6 +216,7 @@ export class HyperliquidPositionService {
         //   usdcBalance = parseFloat(userDetails.marginSummary.availableMargin || '0');
         // } else {
         //   console.log('Could not find balance in user details, using default');
+        //   usdcBalance = 1000; // Default fallback
         // }
         
       //  console.log(`User balance: ${usdcBalance} USDC`);
