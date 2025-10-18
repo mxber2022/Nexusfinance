@@ -23,6 +23,7 @@ export interface MarketMetadata {
   maxLeverage: number;
   minOrderSize: string;
   tickSize: string;
+  szDecimals?: number;
 }
 
 export class HyperliquidPositionService {
@@ -84,6 +85,7 @@ export class HyperliquidPositionService {
         maxLeverage: asset.maxLeverage || 50,
         minOrderSize: asset.szDecimals ? `0.${'0'.repeat(asset.szDecimals - 1)}1` : '0.001',
         tickSize: asset.pxDecimals ? `0.${'0'.repeat(asset.pxDecimals - 1)}1` : '0.01',
+        szDecimals: asset.szDecimals || 6,
       }));
     } catch (error) {
       console.error('Error fetching market metadata:', error);
@@ -98,41 +100,61 @@ export class HyperliquidPositionService {
     try {
       const { infoClient } = await this.initializeClients();
 
-      // Try allMids first (common source)
-      try {
-        const allMids = await infoClient.allMids();
-        if (Array.isArray(allMids) && allMids.length > assetIndex && allMids[assetIndex] != null) {
-          // Ensure string
-          return String(allMids[assetIndex]);
-        }
-      } catch (midErr) {
-        // fallback to meta if allMids fails
-        console.warn('infoClient.allMids() failed:', midErr);
+      // Get all mids (Record<string, string>)
+      const allMids = await infoClient.allMids();
+      console.log('All mids:', allMids);
+
+      // Map asset index to symbol
+      const assetSymbols = ['BTC', 'ETH', 'SOL', 'AVAX']; // Common assets
+      const symbol = assetSymbols[assetIndex];
+      
+      if (symbol && allMids[symbol]) {
+        console.log(`Found price for ${symbol}: ${allMids[symbol]}`);
+        return allMids[symbol];
       }
 
-      // Fallback: try metaAndAssetCtxs to derive a price if provided
+      // Fallback: try metaAndAssetCtxs to get asset name and price
       try {
         const meta = await infoClient.metaAndAssetCtxs();
-         const universe = (meta && meta[0] && meta[0].universe) ? meta[0].universe : [];
+        const universe = (meta && meta[0] && meta[0].universe) ? meta[0].universe : [];
         const asset = universe[assetIndex];
-        if (asset && (asset as any).lastPrice) {
-          return String((asset as any).lastPrice);
+        
+        if (asset && asset.name && allMids[asset.name]) {
+          console.log(`Found price for ${asset.name}: ${allMids[asset.name]}`);
+          return allMids[asset.name];
         }
       } catch (metaErr) {
         console.warn('infoClient.metaAndAssetCtxs() failed:', metaErr);
       }
 
-      // Final fallback: return a conservative placeholder per common assets
+      // Final fallback: return conservative placeholder
       const fallbackPrices: Record<number, string> = {
         0: '106000', // BTC
         1: '3500',   // ETH
+        2: '200',    // SOL
+        3: '40',     // AVAX
       };
       return fallbackPrices[assetIndex] || '100000';
     } catch (error) {
       console.error('Error fetching asset price:', error);
-      // Return fallback
       return '100000';
     }
+  }
+
+  /**
+   * Calculate order size for target leverage
+   * Formula: size = (targetLeverage × collateral) / currentPrice
+   */
+  private calculateOrderSizeForLeverage(
+    targetLeverage: number,
+    collateralUSDC: number,
+    currentPrice: number,
+    szDecimals?: number
+  ): string {
+    const size = (targetLeverage * collateralUSDC) / currentPrice;
+    // Use szDecimals if available, otherwise default to 6
+    const precision = szDecimals || 6;
+    return size.toFixed(precision);
   }
 
   /**
@@ -220,13 +242,42 @@ export class HyperliquidPositionService {
         
         console.log(`User balance: ${usdcBalance} USDC`);      
 
-      // Build market order (no price needed for true market orders)
+      // Get market metadata first for szDecimals and validation
+      const metadata = await this.getMarketMetadata();
+      const asset = metadata[params.assetIndex];
+      if (!asset) {
+        return { success: false, error: 'Asset not found' };
+      }
+
+      // Calculate order size for target leverage
+      const currentPriceStr = await this.getAssetPrice(params.assetIndex);
+      const currentPrice = parseFloat(currentPriceStr);
+      console.log(`Current price: ${currentPrice}`);
+      const orderSize = this.calculateOrderSizeForLeverage(
+        params.leverage,
+        usdcBalance,
+        currentPrice,
+        asset.szDecimals
+      );
+      
+      console.log(`Calculated order size for ${params.leverage}x leverage: ${orderSize}`);
+      
+      // Validate order size against minimum requirements
+      const orderSizeNum = parseFloat(orderSize);
+      const minOrderSize = parseFloat(asset.minOrderSize);
+      if (orderSizeNum < minOrderSize) {
+        return { success: false, error: `Order size too small. Minimum: ${asset.minOrderSize}` };
+      }
+      
+      console.log(`Order size validation: ${orderSize} >= ${asset.minOrderSize} ✓`);
+    console.log(`Current asset index: ${params.assetIndex}`);
+      // Build market order with calculated size
       const order = {
-        a: 3,    // asset index, e.g. 0 for BTC-PERP
-        b: true,        // true = long/buy, false = short/sell
-        p: "115360",     
-        r: false,      // no price for market orders
-        s: "0.03356",          // position size               // reduce-only (false = open new position)
+        a: 3,    // asset index
+        b: params.isLong,        // true = long/buy, false = short/sell
+        p: Math.floor(currentPrice).toString(),               
+        r: false,                // reduce-only (false = open new position)
+        s: orderSize,            // calculated size for target leverage
         t: {limit: {tif: "FrontendMarket"}}
       };
   
