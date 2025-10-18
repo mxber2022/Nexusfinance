@@ -62,3 +62,41 @@ export interface RefuelData {
   destinationChain: string;
   timestamp: number;
 }
+
+// Position opening types
+export interface PositionParams {
+  assetIndex: number;
+  isLong: boolean;
+  size: string;
+  leverage: number;
+  isTestnet?: boolean;
+}
+
+export interface PositionResult {
+  success: boolean;
+  txHash?: string;
+  error?: string;
+  orderId?: string;
+}
+
+export interface MarketMetadata {
+  assetIndex: number;
+  symbol: string;
+  name: string;
+  maxLeverage: number;
+  minOrderSize: string;
+  tickSize: string;
+}
+
+export interface PositionDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  assetSymbol: string;
+  assetName: string;
+  currentPrice: string;
+  positionType: 'long' | 'short'; // Pass the selected position type
+  onPositionOpen: (params: PositionParams) => Promise<PositionResult>;
+  isOpening: boolean;
+  error: string | null;
+  onClearError: () => void;
+}
