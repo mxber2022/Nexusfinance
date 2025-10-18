@@ -197,29 +197,28 @@ export class HyperliquidPositionService {
       if (!validation.valid) {
         return { success: false, error: validation.error };
       }
-        // Get user balance using InfoClient
+        // Get user balance using InfoClient;
         const { infoClient } = await this.initializeClients();
         const userAddress = await this.signer.getAddress();
         
         console.log('Fetching user details for address:', userAddress);
-        const userDetails = await infoClient.userDetails({ user: userAddress });
+        const userState = await infoClient.clearinghouseState({ user: userAddress });
+        console.log('User state:', JSON.stringify(userState));
         
-        console.log('User details:', JSON.stringify(userDetails, null, 2));
+        // Extract USDC balance from user state
+        let usdcBalance = 0;
+        if ((userState as any).withdrawable) {
+          usdcBalance = parseFloat((userState as any).withdrawable);
+          console.log('Found balance in withdrawable:', usdcBalance);
+        } else if (userState.marginSummary && (userState.marginSummary as any).withdrawable) {
+          usdcBalance = parseFloat((userState.marginSummary as any).withdrawable);
+          console.log('Found balance in marginSummary.withdrawable:', usdcBalance);
+        } else {
+          console.log('Could not find balance in user state, using default');
+          usdcBalance = 1000; // Default fallback
+        }
         
-        // Extract USDC balance from user details
-        // let usdcBalance = 0;
-        // if (userDetails.collateral) {
-        //   usdcBalance = parseFloat(
-        //     userDetails.collateral.find((c: any) => c.token === 'USDC')?.balance || '0'
-        //   );
-        // } else if (userDetails.marginSummary) {
-        //   usdcBalance = parseFloat(userDetails.marginSummary.availableMargin || '0');
-        // } else {
-        //   console.log('Could not find balance in user details, using default');
-        //   usdcBalance = 1000; // Default fallback
-        // }
-        
-      //  console.log(`User balance: ${usdcBalance} USDC`);
+        console.log(`User balance: ${usdcBalance} USDC`);      
 
       // Build market order (no price needed for true market orders)
       const order = {
