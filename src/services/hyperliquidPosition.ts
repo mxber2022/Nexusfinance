@@ -197,6 +197,28 @@ export class HyperliquidPositionService {
       if (!validation.valid) {
         return { success: false, error: validation.error };
       }
+        // Get user balance using InfoClient
+        const { infoClient } = await this.initializeClients();
+        const userAddress = await this.signer.getAddress();
+        
+        console.log('Fetching user details for address:', userAddress);
+        const userDetails = await infoClient.userDetails({ user: userAddress });
+        
+        console.log('User details:', JSON.stringify(userDetails, null, 2));
+        
+        // Extract USDC balance from user details
+        // let usdcBalance = 0;
+        // if (userDetails.collateral) {
+        //   usdcBalance = parseFloat(
+        //     userDetails.collateral.find((c: any) => c.token === 'USDC')?.balance || '0'
+        //   );
+        // } else if (userDetails.marginSummary) {
+        //   usdcBalance = parseFloat(userDetails.marginSummary.availableMargin || '0');
+        // } else {
+        //   console.log('Could not find balance in user details, using default');
+        // }
+        
+      //  console.log(`User balance: ${usdcBalance} USDC`);
 
       // Build market order (no price needed for true market orders)
       const order = {
