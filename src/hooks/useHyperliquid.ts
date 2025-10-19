@@ -4,7 +4,7 @@ import { HyperliquidService, DepositParams } from '../services/hyperliquid';
 import { ethers } from 'ethers';
 
 export interface UseHyperliquidReturn {
-  depositToHyperliquid: (amount: string) => Promise<{
+  depositToHyperliquid: (amount: string, sdk?: any) => Promise<{
     success: boolean;
     txHash?: string;
     error?: string;
@@ -31,7 +31,7 @@ export const useHyperliquid = (isMainnet: boolean = true): UseHyperliquidReturn 
   const [isDepositing, setIsDepositing] = useState(false);
   const [isWithdrawing, setIsWithdrawing] = useState(false);
 
-  const depositToHyperliquid = useCallback(async (amount: string) => {
+  const depositToHyperliquid = useCallback(async (amount: string, sdk?: any) => {
     if (!walletClient || !address) {
       return {
         success: false,
@@ -69,7 +69,7 @@ export const useHyperliquid = (isMainnet: boolean = true): UseHyperliquidReturn 
       };
 
       // Execute deposit
-      const result = await hyperliquidService.depositToHyperliquid(depositParams);
+      const result = await hyperliquidService.depositToHyperliquid(depositParams, sdk);
       
       return result;
 

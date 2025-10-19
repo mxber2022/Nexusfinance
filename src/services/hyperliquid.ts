@@ -1,4 +1,9 @@
-import { ethers } from 'ethers';
+import { BridgeAndExecuteParams, BridgeAndExecuteResult, SUPPORTED_CHAINS_IDS, SUPPORTED_TOKENS, TOKEN_METADATA } from '@avail-project/nexus-widgets';
+import { ethers, parseUnits } from 'ethers';
+import { Abi } from 'viem';
+/*
+ Hyperliquid Bridge Contract Configuration (testnet Only) and also USDC2 is the testnet version of USDC line 73
+*/
 
 // Hyperliquid Bridge Contract Configuration (Mainnet Only)
 export const HYPERLIQUID_BRIDGE_CONFIG = {
@@ -7,6 +12,13 @@ export const HYPERLIQUID_BRIDGE_CONFIG = {
   chainId: 42161, // Arbitrum Mainnet
   domainVersion: '2'
 };
+
+//  export const HYPERLIQUID_BRIDGE_CONFIG = {
+//   bridgeAddress: '0x08cfc1B6b2dCF36A1480b99353A354AA8AC56f89',
+//   usdcAddress: '0x1baAbB04529D43a73232B713C0FE471f7c7334d5',
+//   chainId: 421614, // Arbitrum testnet
+//   domainVersion: '1'
+// };
 
 // USDC ABI for permit functionality
 export const USDC_ABI = [
@@ -61,7 +73,9 @@ export class HyperliquidService {
     
     // Use the official domain name from Hyperliquid docs
     // For mainnet: name: "USD Coin", version: "2"
-    const correctDomainName = "USD Coin";
+    
+    const correctDomainName = "USD Coin"; // mainnet
+    // const correctDomainName = "USDC2"; // testnet
     
     console.log('Using official EIP-712 domain name:', correctDomainName);
     
@@ -159,10 +173,189 @@ export class HyperliquidService {
     };
   }
 
+  // /**
+  //  * Deposit USDC to Hyperliquid using permit
+  //  */
+  // async depositToHyperliquid(params: DepositParams): Promise<{
+  //   success: boolean;
+  //   txHash?: string;
+  //   error?: string;
+  // }> {
+  //   try {
+  //     const config = await this.getConfig();
+      
+  //     // Get USDC decimals dynamically
+  //     const usdcContract = new ethers.Contract(config.usdcAddress, USDC_ABI, this.provider);
+  //     const decimals = await usdcContract.decimals();
+  //     const amountInWei = ethers.parseUnits(params.amount, decimals);
+  //     const minimumAmount = ethers.parseUnits('5', decimals);
+      
+  //     // Validate minimum deposit amount (5 USDC)
+  //     if (amountInWei < minimumAmount) {
+  //       return {
+  //         success: false,
+  //         error: 'Minimum deposit amount is 5 USDC'
+  //       };
+  //     }
+
+  //     // Check if user is on correct network
+  //     const { chainId } = await this.provider.getNetwork();
+  //     console.log('Current network chain ID:', chainId);
+  //     console.log('Expected chain ID:', config.chainId);
+      
+  //     if (Number(chainId) !== config.chainId) {
+  //       return {
+  //         success: false,
+  //         error: `Please switch to Arbitrum network (Chain ID: ${config.chainId}). Current network: ${chainId}`
+  //       };
+  //     }
+
+  //     // Check user has sufficient USDC balance
+  //     const balance = await usdcContract.balanceOf(params.userAddress);
+  //     console.log('USDC balance:', ethers.formatUnits(balance, decimals));
+      
+  //     if (balance < amountInWei) {
+  //       return {
+  //         success: false,
+  //         error: `Insufficient USDC balance. You have ${ethers.formatUnits(balance, decimals)} USDC, need ${params.amount} USDC`
+  //       };
+  //     }
+
+  //     // Note: No need to check allowance for permit-based flows
+  //     // The bridge contract will call permit() internally
+
+  //     // Create deadline (1 hour from now)
+  //     const deadline = BigInt(Math.floor(Date.now() / 1000) + 3600);
+      
+  //     // Create permit signature with wei values (as required by USDC permit)
+  //     const { signature } = await this.createPermitSignature(params.amount, deadline.toString());
+  //     const { v, r, s } = this.splitSignature(signature);
+      
+  //     console.log('Signature components:', { v, r, s });
+
+  //     // Create bridge contract instance
+  //     const bridgeContract = new ethers.Contract(config.bridgeAddress, BRIDGE_ABI, this.signer);
+
+  //     // Test if contract is paused
+  //     try {
+  //       const isPaused = await bridgeContract.paused();
+  //       if (isPaused) {
+  //         return {
+  //           success: false,
+  //           error: 'Hyperliquid bridge is currently paused. Please try again later.'
+  //         };
+  //       }
+  //     } catch (error) {
+  //       console.error('Contract connection test failed:', error);
+  //       return {
+  //         success: false,
+  //         error: 'Cannot connect to Hyperliquid bridge contract. Please check your network connection.'
+  //       };
+  //     }
+
+  //     // Create deposit struct with wei values to match permit signature
+  //     const deposit = {
+  //       user: params.userAddress,
+  //       usd: Number(amountInWei),  // Wei values (5000000) to match permit
+  //       deadline: Number(deadline), // Convert to number for uint64
+  //       signature: {
+  //         r: r,  // uint256 r
+  //         s: s,  // uint256 s  
+  //         v: v   // uint8 v
+  //       }
+  //     };
+
+  //     // Critical check: signer must match deposit user
+  //     const signerAddr = await this.signer.getAddress();
+  //     console.log("Signer Address:", signerAddr);
+  //     console.log("Deposit User:", deposit.user);
+  //     console.log("Addresses match:", signerAddr.toLowerCase() === deposit.user.toLowerCase());
+      
+  //     console.log('Deposit sent to bridge:', {
+  //       user: deposit.user,
+  //       usd: deposit.usd.toString(),        // micro-USDC integer
+  //       deadline: deposit.deadline.toString(),
+  //       v, r, s
+  //     });
+
+  //     // Call batchedDepositWithPermit with correct tuple structure
+  //     console.log('Attempting batchedDepositWithPermit...');
+  //     console.log('Deposit struct being sent:', {
+  //       user: deposit.user,
+  //       usd: deposit.usd,
+  //       deadline: deposit.deadline,
+  //       signature: deposit.signature
+  //     });
+      
+  //     // Log the signature components separately to match the example format
+  //     console.log('Signature components (r, s, v):', {
+  //       r: deposit.signature.r,
+  //       s: deposit.signature.s,
+  //       v: deposit.signature.v
+  //     });
+      
+  //     try {
+  //       // The function expects an array of DepositWithPermit structs
+  //       const deposits = [{
+  //         user: deposit.user,
+  //         usd: deposit.usd,
+  //         deadline: deposit.deadline,
+  //         signature: deposit.signature
+  //       }];
+        
+  //       const tx = await bridgeContract.batchedDepositWithPermit(deposits, {
+  //         gasLimit: 500000
+  //       });
+        
+  //       console.log('Transaction submitted:', tx.hash);
+  //       const receipt = await tx.wait();
+        
+  //       return {
+  //         success: true,
+  //         txHash: receipt.hash
+  //       };
+  //     } catch (txError) {
+  //       console.error('Bridge deposit failed:', txError);
+  //       return {
+  //         success: false,
+  //         error: 'Bridge deposit failed. Please check your USDC balance and try again.'
+  //       };
+  //     }
+
+  //   } catch (error) {
+  //     console.error('Hyperliquid deposit error:', error);
+      
+  //     let errorMessage = 'Deposit failed';
+  //     if (error instanceof Error) {
+  //       if (error.message.includes('insufficient funds')) {
+  //         errorMessage = 'Insufficient funds for deposit';
+  //       } else if (error.message.includes('user rejected')) {
+  //         errorMessage = 'Transaction was cancelled by user';
+  //       } else if (error.message.includes('execution reverted')) {
+  //         errorMessage = 'Transaction failed - please check your USDC balance and try again';
+  //       } else if (error.message.includes('missing revert data')) {
+  //         errorMessage = 'Transaction would fail - please ensure you have sufficient USDC balance';
+  //       } else {
+  //         errorMessage = error.message;
+  //       }
+  //     }
+
+  //     return {
+  //       success: false,
+  //       error: errorMessage
+  //     };
+  //   }
+  // }
+
+
+
+
+
+
   /**
    * Deposit USDC to Hyperliquid using permit
    */
-  async depositToHyperliquid(params: DepositParams): Promise<{
+  async depositToHyperliquid(params: DepositParams, sdk?: any): Promise<{
     success: boolean;
     txHash?: string;
     error?: string;
@@ -175,7 +368,7 @@ export class HyperliquidService {
       const decimals = await usdcContract.decimals();
       const amountInWei = ethers.parseUnits(params.amount, decimals);
       const minimumAmount = ethers.parseUnits('5', decimals);
-      
+  
       // Validate minimum deposit amount (5 USDC)
       if (amountInWei < minimumAmount) {
         return {
@@ -200,12 +393,12 @@ export class HyperliquidService {
       const balance = await usdcContract.balanceOf(params.userAddress);
       console.log('USDC balance:', ethers.formatUnits(balance, decimals));
       
-      if (balance < amountInWei) {
-        return {
-          success: false,
-          error: `Insufficient USDC balance. You have ${ethers.formatUnits(balance, decimals)} USDC, need ${params.amount} USDC`
-        };
-      }
+      // if (balance < amountInWei) {
+      //   return {
+      //     success: false,
+      //     error: `Insufficient USDC balance. You have ${ethers.formatUnits(balance, decimals)} USDC, need ${params.amount} USDC`
+      //   };
+      // }
 
       // Note: No need to check allowance for permit-based flows
       // The bridge contract will call permit() internally
@@ -250,6 +443,7 @@ export class HyperliquidService {
           v: v   // uint8 v
         }
       };
+      const depositss = [deposit];
 
       // Critical check: signer must match deposit user
       const signerAddr = await this.signer.getAddress();
@@ -289,16 +483,74 @@ export class HyperliquidService {
           signature: deposit.signature
         }];
         
-        const tx = await bridgeContract.batchedDepositWithPermit(deposits, {
-          gasLimit: 500000
-        });
+        // const tx = await bridgeContract.batchedDepositWithPermit(deposits, {
+        //   gasLimit: 500000
+        // });
+
+const contractAbi: Abi = [
+  {
+    inputs: [
+      {
+        components: [
+          { internalType: "address", name: "user", type: "address" },
+          { internalType: "uint64", name: "usd", type: "uint64" },
+          { internalType: "uint64", name: "deadline", type: "uint64" },
+          {
+            components: [
+              { internalType: "uint256", name: "r", type: "uint256" },
+              { internalType: "uint256", name: "s", type: "uint256" },
+              { internalType: "uint8", name: "v", type: "uint8" }
+            ],
+            internalType: "struct Signature",
+            name: "signature",
+            type: "tuple"
+          }
+        ],
+        internalType: "struct BatchedDeposit[]",
+        name: "deposits",
+        type: "tuple[]"
+      }
+    ],
+    name: "batchedDepositWithPermit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function"
+  }
+];
+
+
+        const result: BridgeAndExecuteResult = await sdk?.bridgeAndExecute({
+          token: 'USDC',
+          amount: deposit.usd,
+          toChainId: HYPERLIQUID_BRIDGE_CONFIG.chainId,
+          execute: {
+            contractAddress: HYPERLIQUID_BRIDGE_CONFIG.bridgeAddress,
+            contractAbi: contractAbi,
+            functionName: 'batchedDepositWithPermit',
+            buildFunctionParams: () => {
+              const deposits = [depositss];
+              return {
+                functionParams: [depositss],
+              };
+            },
+          
+            tokenApproval: {
+              token: 'USDC',
+              amount: deposit.usd
+            },
+          },
+          waitForReceipt: true, 
+          requiredConfirmations: 3,
+        } as unknown as BridgeAndExecuteParams);
+  
+        console.log('result', result);
         
-        console.log('Transaction submitted:', tx.hash);
-        const receipt = await tx.wait();
+        console.log('Transaction submitted:', result.executeTransactionHash);
+        // const receipt = await tx.wait();
         
         return {
           success: true,
-          txHash: receipt.hash
+          txHash: result.executeTransactionHash
         };
       } catch (txError) {
         console.error('Bridge deposit failed:', txError);
@@ -332,6 +584,10 @@ export class HyperliquidService {
       };
     }
   }
+
+
+
+
 
   /**
    * Batch deposit multiple USDC amounts to Hyperliquid
@@ -488,3 +744,4 @@ export class HyperliquidService {
     }
   }
 }
+

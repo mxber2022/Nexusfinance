@@ -129,7 +129,7 @@ export const PerpPortPage: React.FC = () => {
       if (selectedDEX.id === 'hyperliquid') {
         // Direct deposit to Hyperliquid using their bridge
         console.log('Depositing directly to Hyperliquid...');
-        depositResult = await depositToHyperliquid(amount);
+        depositResult = await depositToHyperliquid(amount, sdk);
         
         if (depositResult.success) {
           setTxHash(depositResult.txHash || '');

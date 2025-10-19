@@ -103,7 +103,6 @@ export function GasRefuelPage({ onRefuelComplete }: GasRefuelPageProps) {
       setRefuelStatus('error');
       return;
     }
-
     // Check if wallet is on the correct source chain
     // const currentChainId = window.ethereum?.chainId ? parseInt(window.ethereum.chainId as string, 16) : null;
     // console.log('Wallet Chain Check:', {
