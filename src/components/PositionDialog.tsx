@@ -137,7 +137,7 @@ export const PositionDialog: React.FC<PositionDialogProps> = ({
                 placeholder="10"
                 min="1"
                 max="100"
-                className="w-full px-4 py-3 bg-black/30 backdrop-blur-xl border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-white/40 focus:outline-none transition-all duration-300"
+                className="w-full px-4 py-3 bg-black/30 backdrop-blur-xl border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-white/40 focus:outline-none transition-all duration-300 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
               />
               <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm">x</div>
             </div>
@@ -152,7 +152,7 @@ export const PositionDialog: React.FC<PositionDialogProps> = ({
               placeholder="100"
               min="0"
               step="0.01"
-              className="w-full px-4 py-3 bg-black/30 backdrop-blur-xl border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-white/40 focus:outline-none transition-all duration-300"
+              className="w-full px-4 py-3 bg-black/30 backdrop-blur-xl border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-white/40 focus:outline-none transition-all duration-300 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
             />
           </div>
 
