@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import { AsterService, DepositParams } from '../services/aster';
 
 export interface UseAsterReturn {
-  depositToAster: (amount: string) => Promise<{
+  depositToAster: (amount: string, sdk?: any) => Promise<{
     success: boolean;
     txHash?: string;
     error?: string;
@@ -20,7 +20,7 @@ export const useAster = (isMainnet: boolean = true): UseAsterReturn => {
   const { data: walletClient } = useWalletClient();
   const [isDepositing, setIsDepositing] = useState(false);
 
-  const depositToAster = useCallback(async (amount: string) => {
+  const depositToAster = useCallback(async (amount: string, sdk?: any) => {
     if (!walletClient || !address) {
       return {
         success: false,
@@ -57,8 +57,13 @@ export const useAster = (isMainnet: boolean = true): UseAsterReturn => {
         isMainnet
       };
 
-      // Execute deposit
-      const result = await asterService.depositToAster(depositParams);
+      // Execute deposit - use Nexus SDK if available, otherwise fallback to direct contract call
+      let result;
+      if (sdk) {
+        result = await asterService.depositToAsterWithNexus(sdk, amount, address);
+      } else {
+        result = await asterService.depositToAster(depositParams);
+      }
       
       return result;
 

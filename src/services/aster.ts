@@ -1,4 +1,6 @@
 import { ethers } from 'ethers';
+import { BridgeAndExecuteParams, BridgeAndExecuteResult } from '@avail-project/nexus-widgets';
+import { Abi } from 'viem';
 
 // Aster Bridge Contract Configuration (Arbitrum)
 export const ASTER_BRIDGE_CONFIG = {
@@ -381,6 +383,71 @@ export class AsterService {
     } catch (error) {
       console.error('Aster network switch error:', error);
       return false;
+    }
+  }
+
+  /**
+   * Deposit USDC to Aster using Nexus SDK bridge and execute
+   */
+  async depositToAsterWithNexus(
+    sdk: any,
+    amount: string,
+    userAddress: string
+  ): Promise<{ success: boolean; txHash?: string; error?: string }> {
+    try {
+      if (!sdk) {
+        throw new Error('Nexus SDK not provided');
+      }
+
+      const config = await this.getConfig();
+
+      const contractAbi: Abi = [
+        {
+          inputs: [
+            { internalType: "address", name: "currency", type: "address" },
+            { internalType: "uint256", name: "amount", type: "uint256" },
+            { internalType: "uint256", name: "broker", type: "uint256" }
+          ],
+          name: "deposit",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function"
+        }
+      ];
+
+      // Use bridgeAndExecute to bridge USDC and execute deposit on Aster
+      const result: BridgeAndExecuteResult = await sdk.bridgeAndExecute({
+        token: 'USDC',
+        amount: parseFloat(amount),
+        toChainId: ASTER_BRIDGE_CONFIG.chainId,
+        execute: {
+          contractAddress: ASTER_BRIDGE_CONFIG.bridgeAddress,
+          contractAbi: contractAbi,
+          functionName: 'deposit',
+          buildFunctionParams: () => ({
+            functionParams: [
+              ASTER_BRIDGE_CONFIG.usdcAddress, 
+              ethers.parseUnits(amount, 6), 
+              1
+            ]
+          }),
+        },
+        waitForReceipt: true, 
+        requiredConfirmations: 3,
+      } as unknown as BridgeAndExecuteParams);
+
+      console.log('Aster bridge and execute result:', result);
+      
+      return {
+        success: true,
+        txHash: result.executeTransactionHash
+      };
+    } catch (error) {
+      console.error('Aster bridge and execute failed:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Aster bridge and execute failed'
+      };
     }
   }
 }

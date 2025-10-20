@@ -141,7 +141,7 @@ export const PerpPortPage: React.FC = () => {
       } else if (selectedDEX.id === 'aster') {
         // Direct deposit to Aster using their bridge
         console.log('Depositing directly to Aster...');
-        depositResult = await depositToAster(amount);
+        depositResult = await depositToAster(amount, sdk);
         
         if (depositResult.success) {
           setTxHash(depositResult.txHash || '');
