@@ -208,6 +208,21 @@
   }
 }
 
+@keyframes float-together-4 {
+  0% {
+    transform: translate(0, 0) scale(0.8);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-30px, 20px) scale(0.9);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-60px, -40px) scale(1);
+    opacity: 1;
+  }
+}
+
 .animate-float-together-1 {
   animation: float-together-1 4s ease-out infinite;
 }
@@ -218,6 +233,10 @@
 
 .animate-float-together-3 {
   animation: float-together-3 4s ease-out infinite 1s;
+}
+
+.animate-float-together-4 {
+  animation: float-together-4 4s ease-out infinite 1.5s;
 }
 
 /* Enhanced bounce animation for logo */

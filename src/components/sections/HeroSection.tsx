@@ -22,6 +22,10 @@ export function HeroSection() {
       {
         src: "https://cdn.prod.website-files.com/66b5e4e47712e879f0c5ef1b/686bcf104a9c1d2d2c69c5da_r.svg",
         alt: "Reya"
+      },
+      {
+        src: "/gas.png",
+        alt: "Gas Refuel"
       }
     ],
     // Protocol logos
@@ -37,6 +41,10 @@ export function HeroSection() {
       {
         src: "/morpho.jpg",
         alt: "Morpho"
+      },
+      {
+        src: "/gas.png",
+        alt: "Gas Refuel"
       }
     ]
   ];
@@ -201,6 +209,19 @@ export function HeroSection() {
                        alt={logoSets[logoSet][2].alt} 
                        className="relative w-8 h-8 rounded-full object-contain transition-all duration-1000 ease-out drop-shadow-lg"
                      />
+                   </div>
+                 </div>
+                 
+                 {/* Protocol 4 - starts bottom-left, moves to left */}
+                 <div className="absolute bottom-1/3 left-1/3 animate-float-together-4">
+                   <div className="relative flex items-center justify-center">
+                     {/* Glow effect */}
+                     <div className="absolute inset-0 w-10 h-10 bg-cyan-500/20 rounded-full blur-sm animate-pulse" style={{animationDelay: '1.5s'}}></div>
+                       <img 
+                         src={logoSets[logoSet][3].src} 
+                         alt={logoSets[logoSet][3].alt} 
+                         className="relative w-8 h-8 object-contain transition-all duration-1000 ease-out drop-shadow-lg brightness-0 invert"
+                       />
                    </div>
                  </div>
                </div>
