@@ -40,29 +40,29 @@ export const CHAINS: Chain[] = [
     blockExplorerUrls: ['https://arbiscan.io']
   },
   { 
-    id: 8453, 
-    name: 'Base', 
-    shortName: 'BASE',
-    logo: 'https://assets.coingecko.com/coins/images/27505/large/lusd.png',
+    id: 56, 
+    name: 'BNB Smart Chain', 
+    shortName: 'BNB',
+    logo: 'https://assets.coingecko.com/coins/images/825/large/bnb-icon2_2x.png',
     nativeCurrency: {
-      name: 'Ethereum',
-      symbol: 'ETH',
+      name: 'BNB',
+      symbol: 'BNB',
       decimals: 18
     },
-    rpcUrls: ['https://mainnet.base.org'],
-    blockExplorerUrls: ['https://basescan.org']
+    rpcUrls: ['https://bsc-dataseed1.binance.org'],
+    blockExplorerUrls: ['https://bscscan.com']
   },
   { 
-    id: 10, 
-    name: 'Optimism', 
-    shortName: 'OP',
-    logo: 'https://assets.coingecko.com/coins/images/25244/large/Optimism.png',
+    id: 1399811149, 
+    name: 'Solana', 
+    shortName: 'SOL',
+    logo: 'https://assets.coingecko.com/coins/images/4128/large/solana.png',
     nativeCurrency: {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      decimals: 18
+      name: 'Solana',
+      symbol: 'SOL',
+      decimals: 9
     },
-    rpcUrls: ['https://mainnet.optimism.io'],
-    blockExplorerUrls: ['https://optimistic.etherscan.io']
+    rpcUrls: ['https://api.mainnet-beta.solana.com'],
+    blockExplorerUrls: ['https://explorer.solana.com']
   }
 ];

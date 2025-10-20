@@ -28,7 +28,7 @@ export const PerpPortPage: React.FC = () => {
 
   const [selectedDEX, setSelectedDEX] = useState(DEXES[0]);
   const [selectedChain, setSelectedChain] = useState(CHAINS.find(chain => chain.id === 42161) || CHAINS[0]); // Default to Arbitrum
-  const [selectedToken, setSelectedToken] = useState(TOKENS[0]);
+  const [selectedToken, setSelectedToken] = useState(TOKENS.find(token => token.symbol === 'USDC') || TOKENS[0]);
   const [amount, setAmount] = useState('');
   const [isMarketDialogOpen, setIsMarketDialogOpen] = useState(false);
   

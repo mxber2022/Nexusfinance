@@ -24,6 +24,12 @@ export const TOKENS: Token[] = [
     name: 'Tether', 
     decimals: 6, 
     logo: 'https://assets.coingecko.com/coins/images/325/large/Tether.png' 
+  },
+  { 
+    symbol: 'SOL', 
+    name: 'Solana', 
+    decimals: 9, 
+    logo: 'https://assets.coingecko.com/coins/images/4128/large/solana.png' 
   }
 ];
 
