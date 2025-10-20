@@ -460,7 +460,7 @@ export const PerpPortPage: React.FC = () => {
                   ) : (
                     <div className="flex items-center justify-center space-x-2">
                       <Download className="h-4 w-4" />
-                      <span>Withdraw from Hyperliquid</span>
+                      <span>Withdraw from {selectedDEX.name}</span>
                     </div>
                   )}
                 </button>

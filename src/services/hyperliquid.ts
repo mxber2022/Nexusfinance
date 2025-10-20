@@ -545,13 +545,18 @@ const contractAbi: Abi = [
   
         console.log('result', result);
         
-        console.log('Transaction submitted:', result.executeTransactionHash);
-        // const receipt = await tx.wait();
-        
-        return {
-          success: true,
-          txHash: result.executeTransactionHash
-        };
+        // Check if the operation actually succeeded
+        if (result && result.success && result.executeTransactionHash) {
+          console.log('Transaction submitted:', result.executeTransactionHash);
+          return {
+            success: true,
+            txHash: result.executeTransactionHash
+          };
+        } else {
+          // Extract error message from the result
+          const errorMessage = result?.error || 'Bridge and execute operation failed';
+          throw new Error(errorMessage);
+        }
       } catch (txError) {
         console.error('Bridge deposit failed:', txError);
         return {
