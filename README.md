@@ -1,26 +1,31 @@
 # NexusFinance
 
-A revolutionary cross-chain DeFi hub powered by Avail Nexus SDK, enabling seamless gas refueling, yield optimization, and perpetual trading across multiple blockchain networks.
+**The Universal Perpetual Aggregator** - Trade any perpetual, anywhere, with one click. A revolutionary cross-chain DeFi platform powered by Avail Nexus SDK, enabling seamless perpetual trading, gas refueling, and unified USDC/USDT deposits to the highest yield generating markets.
 
-## 🚀 Features
+## 🚀 What We've Built
+
+### ⚡ PerpPort - Universal Perpetual Aggregator
+- **Multi-DEX Integration**: Seamlessly trade on Hyperliquid, Aster, Reya, and Lighter
+- **Cross-Chain Native**: Deposit from Ethereum, Arbitrum, BNB Smart Chain, and Solana
+- **Unified Trading Interface**: Single dashboard for all perpetual DEXes
+- **Real-Time Market Data**: Live funding rates, liquidity, and volume across all platforms
+- **One-Click Position Opening**: Bridge USDC and open positions in a single transaction
+- **Smart Execution**: Automatic routing to best liquidity and rates
 
 ### ⛽ Cross-Chain Gas Refuel
-- **Universal Token Support**: Use any token from any network to refuel native gas on any chain
-- **Lightning-Fast Settlement**: Powered by Avail Nexus SDK for cross-chain execution in under 5 minutes
-- **Multi-Chain Support**: Support for 15+ chains including Ethereum, Arbitrum, Avalanche, Polygon, BSC, and more
-- **Smart Routing**: Automatically finds the most efficient path for your cross-chain transactions
+- **Universal Token Support**: Use ETH, USDC, USDT from any network to refuel gas on any chain
+- **Multi-Chain Support**: Ethereum, Arbitrum, BNB Smart Chain, Solana
+- **Unified Balance Display**: See your total balance across all chains
+- **Lightning-Fast Settlement**: Powered by Avail Nexus SDK for cross-chain execution
+- **Smart Routing**: Automatically finds the most efficient path for your transactions
 
-### 📈 FlowFi - Auto Yield Optimization
-- **Intelligent Yield Chasing**: Automatically moves idle stablecoins to the best yield platforms across chains
-- **Multi-Protocol Support**: Integrates with Aave, Morpho, Compound, and Euler protocols
-- **Auto Rebalancing**: Every 7 days, AI agent rebalances to maintain optimal yield
-- **One-Click Execution**: Bridge and deposit to target yield pools in a single transaction
-
-### ⚡ PerpPort - Cross-Chain Perpetual Deposits
-- **Multi-DEX Support**: Deposit to Hyperliquid, Aster, Lighter, and other leading perpetual exchanges
-- **Cross-Chain Native**: Deposit from any supported chain without manual bridging
-- **Real-Time Market Data**: Live funding rates, liquidity, and volume data across all DEXs
-- **One-Click Deposits**: Bridge and deposit to your favorite perpetual DEX in a single transaction
+### 🔧 Advanced Features
+- **Nexus SDK Integration**: Seamless cross-chain bridging with `bridgeAndExecute`
+- **Position Management**: Open long/short positions with leverage on any supported DEX
+- **Unified Deposits**: Deposit unified USDC/USDT to the highest yield generating markets
+- **Market Data Integration**: Real-time funding rates and best execution
+- **Wallet Integration**: Support for all major wallets via Reown AppKit
+- **Responsive Design**: Modern UI with Tailwind CSS and smooth animations
 
 ## 🛠️ Tech Stack
 
@@ -68,61 +73,80 @@ A revolutionary cross-chain DeFi hub powered by Avail Nexus SDK, enabling seamle
 src/
 ├── components/           # Reusable UI components
 │   ├── layout/          # Header, Footer
-│   ├── sections/        # Page sections
-│   └── ui/              # UI components (Button, Card, etc.)
+│   ├── sections/        # Page sections (HeroSection)
+│   ├── ui/              # UI components (Button, Card, etc.)
+│   ├── PositionDialog.tsx # Position opening dialog
+│   └── OpenPositionButton.tsx # Position opening button
 ├── constants/           # Chain and token configurations
+│   ├── chains.ts        # Supported blockchain networks
+│   ├── tokens.ts        # Supported tokens
+│   ├── dexes.ts         # DEX configurations
+│   └── marketData.ts    # Market data constants
 ├── hooks/               # Custom React hooks
+│   ├── useHyperliquid.ts # Hyperliquid integration
+│   ├── useAster.ts      # Aster integration
+│   ├── useReyaData.ts   # Reya market data
+│   └── useTokenBalances.ts # Token balance management
 ├── pages/               # Main application pages
 │   ├── HomePage.tsx     # Landing page
 │   ├── GasRefuelPage.tsx # Gas refueling interface
-│   ├── FlowFiPage.tsx   # Yield optimization
-│   └── PerpPortPage.tsx # Perpetual deposits
+│   ├── FlowFiPage.tsx   # Yield optimization (placeholder)
+│   └── PerpPortPage.tsx # Perpetual trading interface
 ├── providers/           # React context providers
+│   └── AppKitProvider.tsx # Wallet connection provider
 ├── services/            # External service integrations
+│   ├── hyperliquid.ts  # Hyperliquid SDK integration
+│   ├── hyperliquidApi.ts # Hyperliquid API client
+│   ├── hyperliquidPosition.ts # Position management
+│   ├── aster.ts         # Aster integration
+│   ├── asterApi.ts      # Aster API client
+│   └── reyaApi.ts       # Reya API client
 └── types/               # TypeScript type definitions
+    └── index.ts         # Shared type definitions
 ```
 
 ## 🔧 Configuration
 
 ### Supported Chains
-- Ethereum (1)
-- Base (8453)
-- Arbitrum (42161)
-- Optimism (10)
-- Polygon (137)
-- Avalanche (43114)
-- Scroll (534352)
-- Sophon (50104)
-- Kaia (8217)
-- BNB (56)
-- HyperEVM (999)
+- **Ethereum** (1) - Mainnet
+- **Arbitrum** (42161) - Layer 2 scaling
+- **BNB Smart Chain** (56) - Binance ecosystem
+- **Solana** (1399811149) - High-performance blockchain
 
 ### Supported Tokens
-- Native tokens (ETH, AVAX, MATIC, etc.)
-- Stablecoins (USDC, USDT, DAI)
-- Wrapped tokens (WETH, WAVAX, etc.)
+- **ETH** - Ethereum native token
+- **USDC** - USD Coin (6 decimals)
+- **USDT** - Tether (6 decimals)
+- **SOL** - Solana native token (9 decimals)
+
+### Supported DEXes
+- **Hyperliquid** - Decentralized perpetual exchange
+- **Aster** - Cross-chain perpetual protocol
+- **Reya** - Cross-chain perpetual protocol
+- **Lighter** - Coming soon
 
 ## 🚀 Usage
 
+### Perpetual Trading (PerpPort)
+1. **Connect your wallet** using any supported wallet provider
+2. **Select your DEX** - Choose from Hyperliquid, Aster, Reya, or Lighter
+3. **Choose your token** - Select ETH, USDC, USDT, or SOL
+4. **Enter deposit amount** - Specify how much you want to deposit
+5. **Click "Deposit"** - The platform will automatically bridge and deposit to your chosen DEX
+6. **Open positions** - Use the unified interface to open long/short positions with leverage
+
 ### Gas Refueling
-1. Connect your wallet
-2. Select source chain (where you have tokens)
-3. Choose destination chain (where you need gas)
-4. Enter refuel amount
-5. Click "Refuel" to execute cross-chain transaction
+1. **Connect your wallet** to access your balances
+2. **Select destination chain** - Choose where you need gas (Ethereum, Arbitrum, BNB, Solana)
+3. **Choose your token** - Use ETH, USDC, or USDT to refuel
+4. **Enter refuel amount** - Specify how much gas you need
+5. **Click "Refuel"** - Execute cross-chain transaction to refuel your destination chain
 
-### Yield Optimization
-1. Select your stablecoin (USDC, USDT, DAI)
-2. Choose target protocol (Aave, Morpho, Compound, Euler)
-3. Enter amount to optimize
-4. Enable auto-rebalancing (optional)
-5. Click "Move Now" to execute
-
-### Perpetual Deposits
-1. Select your preferred DEX (Hyperliquid, Aster, Lighter)
-2. Choose source chain and token
-3. Enter deposit amount
-4. Click "Deposit" to bridge and deposit in one transaction
+### Key Features
+- **Unified Balance Display**: See your total balance across all chains
+- **One-Click Operations**: Bridge and deposit in a single transaction
+- **Real-Time Data**: Live funding rates and market data
+- **Cross-Chain Native**: No manual bridging required
 
 ## 🔒 Security
 
@@ -133,28 +157,54 @@ src/
 
 ## 🌐 Network Support
 
-### Mainnet Chains
-- Ethereum
-- Arbitrum
-- Base
-- Optimism
-- Polygon
-- Avalanche
-- Scroll
-- BNB Smart Chain
+### Production Ready
+- **Ethereum** - Mainnet with full USDC/USDT support
+- **Arbitrum** - Layer 2 scaling with optimized gas costs
+- **BNB Smart Chain** - Binance ecosystem integration
+- **Solana** - High-performance blockchain support
 
-### Testnet Support
-- Sepolia
-- Arbitrum Sepolia
-- Base Sepolia
-- Polygon Mumbai
+### DEX Integrations
+- **Hyperliquid** - Full integration with position opening
+- **Aster** - Cross-chain perpetual protocol
+- **Reya** - Cross-chain perpetual protocol
+- **Lighter** - Coming soon
+
+### Cross-Chain Infrastructure
+- **Avail Nexus SDK** - Seamless cross-chain bridging
+- **Bridge and Execute** - Single transaction for bridge + deposit
+- **Unified Balances** - Cross-chain balance aggregation
+- **Smart Routing** - Optimal path selection
+
+## 🔧 Technical Implementation
+
+### Core Services
+- **Hyperliquid Integration**: Full SDK integration with position opening, market data, and balance management
+- **Aster Integration**: Cross-chain deposit functionality with Nexus SDK bridge and execute
+- **Reya Integration**: Market data and funding rate aggregation
+- **Gas Refuel Service**: Cross-chain gas refueling with unified balance display
+
+### Key Features Implemented
+- **Nexus SDK Integration**: `bridgeAndExecute` for seamless cross-chain operations
+- **Position Management**: Open long/short positions with leverage on Hyperliquid
+- **Unified Deposits**: Deposit unified USDC/USDT to highest yield markets
+- **Market Data**: Real-time funding rates, liquidity, and volume data
+- **Unified UI**: Single interface for all perpetual DEXes
+- **Cross-Chain Balances**: Aggregate balances across all supported chains
+
+### Architecture
+- **Frontend**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS with custom animations
+- **Blockchain**: Wagmi + Viem + Ethers.js
+- **Cross-Chain**: Avail Nexus SDK
+- **Wallet**: Reown AppKit (WalletConnect)
+- **State**: TanStack Query for data fetching
 
 ## 📊 Analytics & Monitoring
 
 - **Real-time Balance Tracking**: Monitor your assets across all chains
 - **Transaction History**: Complete record of all cross-chain operations
-- **Yield Performance**: Track your yield optimization results
-- **Gas Fee Optimization**: Smart routing to minimize transaction costs
+- **Market Data**: Live funding rates and liquidity across all DEXes
+- **Position Tracking**: Monitor your perpetual positions across platforms
 
 ## 🤝 Contributing
 
