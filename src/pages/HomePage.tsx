@@ -152,11 +152,13 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
           
           <div className="relative z-10 text-center mb-16">
             <div className="inline-flex items-center px-3 py-1.5 bg-black/20 backdrop-blur-2xl border border-white/15 rounded-full text-gray-200 text-xs font-medium mb-4 shadow-xl">
-              <TrendingUp className="h-3 w-3 mr-1.5 text-green-400" />
-              Auto Yield Optimization
+              {/* <TrendingUp className="h-3 w-3 mr-1.5 text-green-400" /> */}
+              <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+              
+               Yield Optimization
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">
-              Your Stablecoins Always Chasing the Best Yield
+              {/* Your Stablecoins Always Chasing the Best Yield */}
             </h2>
             <p className="text-base text-gray-300 max-w-2xl mx-auto mb-6">
               {/* Automatically move idle stables to the best yield platforms across chains with a single click. */}
@@ -231,14 +233,15 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
           
           <div className="relative z-10 text-center mb-16">
             <div className="inline-flex items-center px-3 py-1.5 bg-black/20 backdrop-blur-2xl border border-white/15 rounded-full text-gray-200 text-xs font-medium mb-4 shadow-xl">
-              <Zap className="h-3 w-3 mr-1.5 text-purple-400" />
+              {/* <Zap className="h-3 w-3 mr-1.5 text-purple-400" /> */}
+              <div className="w-2 h-2 bg-purple-400 rounded-full mr-2 animate-pulse"></div>
               Cross-Chain Perpetual Deposits
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">
-              Deposit to Your Favorite Perp DEX — From Any Chain
+              {/* Deposit to Your Favorite Perp DEX — From Any Chain */}
             </h2>
             <p className="text-base text-gray-300 max-w-2xl mx-auto mb-6">
-              One-click deposits to Hyperliquid, Aevo, Drift and more. No manual bridging or network switching required.
+              {/* One-click deposits to Hyperliquid, Aevo, Drift and more. No manual bridging or network switching required. */}
             </p>
           
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
