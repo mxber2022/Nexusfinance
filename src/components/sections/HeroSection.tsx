@@ -117,24 +117,24 @@ export function HeroSection() {
                {/* Background glow effect */}
                <div className="absolute inset-0 bg-gradient-to-r from-gray-500/5 via-white/5 to-gray-500/5 rounded-full blur-3xl animate-pulse-glow"></div>
                
-               {/* Outer rotating ring with gradient */}
+               {/* Outer rotating ring - invisible */}
                <div className="absolute inset-0 rounded-full animate-spin-slow">
-                 <div className="w-full h-full rounded-full border-2 border-transparent bg-gradient-to-r from-white/20 via-gray-300/20 to-white/20 p-1">
-                   <div className="w-full h-full rounded-full bg-black/90 backdrop-blur-xl"></div>
+                 <div className="w-full h-full rounded-full border-2 border-transparent p-1">
+                   <div className="w-full h-full rounded-full"></div>
                  </div>
-                 {/* Orbiting dots */}
-                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-3 w-5 h-5 bg-gradient-to-r from-white to-gray-300 rounded-full shadow-2xl shadow-white/30 animate-pulse-orb"></div>
-                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-3 w-4 h-4 bg-gradient-to-r from-gray-300 to-white rounded-full shadow-2xl shadow-gray-300/30 animate-pulse-orb" style={{animationDelay: '1s'}}></div>
-                 <div className="absolute left-0 top-1/2 transform -translate-x-3 -translate-y-1/2 w-3 h-3 bg-gradient-to-r from-white to-gray-200 rounded-full shadow-2xl shadow-white/20 animate-pulse-orb" style={{animationDelay: '2s'}}></div>
-                 <div className="absolute right-0 top-1/2 transform translate-x-3 -translate-y-1/2 w-4 h-4 bg-gradient-to-r from-gray-200 to-white rounded-full shadow-2xl shadow-gray-200/30 animate-pulse-orb" style={{animationDelay: '3s'}}></div>
+                 {/* Orbiting dots - invisible */}
+                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-3 w-5 h-5 rounded-full animate-pulse-orb"></div>
+                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-3 w-4 h-4 rounded-full animate-pulse-orb" style={{animationDelay: '1s'}}></div>
+                 <div className="absolute left-0 top-1/2 transform -translate-x-3 -translate-y-1/2 w-3 h-3 rounded-full animate-pulse-orb" style={{animationDelay: '2s'}}></div>
+                 <div className="absolute right-0 top-1/2 transform translate-x-3 -translate-y-1/2 w-4 h-4 rounded-full animate-pulse-orb" style={{animationDelay: '3s'}}></div>
                </div>
                
-               {/* Inner rotating ring */}
+               {/* Inner rotating ring - invisible */}
                <div className="absolute inset-12 rounded-full animate-spin-reverse">
-                 <div className="w-full h-full rounded-full border border-white/20 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-sm"></div>
-                 {/* Inner orbiting elements */}
-                 <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white/80 rounded-full animate-pulse-orb"></div>
-                 <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white/60 rounded-full animate-pulse-orb" style={{animationDelay: '1.5s'}}></div>
+                 <div className="w-full h-full rounded-full border border-transparent"></div>
+                 {/* Inner orbiting elements - invisible */}
+                 <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-2 h-2 rounded-full animate-pulse-orb"></div>
+                 <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-2 h-2 rounded-full animate-pulse-orb" style={{animationDelay: '1.5s'}}></div>
                </div>
                
                {/* Center content with Avail logo */}
@@ -144,8 +144,8 @@ export function HeroSection() {
                      {/* Glowing background ring */}
                      <div className="absolute inset-0 w-24 h-24 mx-auto bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-xl animate-pulse-glow"></div>
                      
-                     {/* Rotating outer ring */}
-                     <div className="absolute inset-0 w-24 h-24 mx-auto border border-white/20 rounded-full animate-spin" style={{animationDuration: '8s'}}></div>
+                     {/* Rotating outer ring - invisible */}
+                     <div className="absolute inset-0 w-24 h-24 mx-auto border border-transparent rounded-full animate-spin" style={{animationDuration: '8s'}}></div>
                      
                      {/* Main logo with enhanced animation */}
                      <img 
