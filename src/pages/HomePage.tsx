@@ -12,19 +12,19 @@ interface HomePageProps {
 export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPort }: HomePageProps) {
   const features = [
     {
-      icon: Fuel,
-      title: 'Cross-Chain Gas Refuel',
-      description: 'Use any token from any network to top up native gas on any chain — instantly and seamlessly.'
+      icon: Globe,
+      title: 'Multi-DEX Trading',
+      description: 'Trade perpetuals on Hyperliquid, Aster, Reya, and more — all from one unified interface.'
     },
     {
       icon: Zap,
-      title: 'Fast Settlement',
-      description: 'Powered by Avail Nexus SDK for lightning-fast cross-chain execution in under 5 minutes.'
+      title: 'Cross-Chain Native',
+      description: 'Bridge USDC from any chain and open positions with one click, powered by Avail Nexus SDK.'
     },
     {
-      icon: Globe,
-      title: 'Multi-Chain Support',
-      description: 'Support for 15+ chains including Ethereum, Arbitrum, Avalanche, Polygon, BSC and more.'
+      icon: TrendingUp,
+      title: 'Real-Time Data',
+      description: 'Live funding rates, liquidity, and market data across all perpetual DEXes.'
     }
   ];
 
@@ -42,13 +42,13 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
           <div className="relative z-10 text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 bg-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-full text-gray-300 text-sm font-medium mb-6">
               <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></div>
-              Simple Process
+              How It Works
             </div>
                 <h2 className="text-2xl font-bold text-gray-100 mb-6">
-                  How It Works
+                  {/* How It Works */}
                 </h2>
                 <p className="text-sm text-gray-300 max-w-2xl mx-auto font-medium">
-                  Three simple steps to refuel any chain with any token using cross-chain technology
+                  {/* Three simple steps to trade perpetuals on any DEX with cross-chain deposits */}
                 </p>
           </div>
 
@@ -59,9 +59,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 group-hover:shadow-xl">
                   <span className="text-3xl font-bold text-blue-400 group-hover:text-white transition-colors duration-300">1</span>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-100 mb-4 group-hover:text-white transition-colors duration-300">Select Source Chain</h3>
+                <h3 className="text-lg font-semibold text-gray-100 mb-4 group-hover:text-white transition-colors duration-300">Select Your DEX</h3>
                 <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                  Choose the chain where you have tokens to use for gas refueling
+                  Choose from Hyperliquid, Aster, Reya, or other perpetual DEXes
                 </p>
               </div>
             </div>
@@ -72,9 +72,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
                 <div className="w-20 h-20 bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 group-hover:shadow-xl">
                   <span className="text-3xl font-bold text-green-400 group-hover:text-white transition-colors duration-300">2</span>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-100 mb-4 group-hover:text-white transition-colors duration-300">Choose Destination</h3>
+                <h3 className="text-lg font-semibold text-gray-100 mb-4 group-hover:text-white transition-colors duration-300">Choose Your Token</h3>
                 <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                  Select the chain where you need gas and specify the amount to refuel
+                  Select ETH, USDC, USDT, or SOL and specify the amount to deposit
                 </p>
               </div>
             </div>
@@ -85,9 +85,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
                 <div className="w-20 h-20 bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 group-hover:shadow-xl">
                   <span className="text-3xl font-bold text-purple-400 group-hover:text-white transition-colors duration-300">3</span>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-100 mb-4 group-hover:text-white transition-colors duration-300">Auto-Swap & Refuel</h3>
+                <h3 className="text-lg font-semibold text-gray-100 mb-4 group-hover:text-white transition-colors duration-300">Bridge & Trade</h3>
                 <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                  Nexus SDK automatically swaps tokens and delivers native gas to your destination chain
+                  Nexus SDK automatically bridges your tokens and opens positions on your chosen DEX
                 </p>
               </div>
             </div>
@@ -117,10 +117,10 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
               Key Features
             </div>
             <h2 className="text-2xl font-bold text-gray-100 mb-6">
-              Why Choose NexusFinance?
+              {/* Why Choose NexusFinance? */}
             </h2>
             <p className="text-sm text-gray-300 max-w-2xl mx-auto font-medium leading-relaxed">
-              Revolutionary cross-chain DeFi hub powered by Avail Nexus SDK
+              {/* Revolutionary cross-chain DeFi hub powered by Avail Nexus SDK */}
             </p>
           </div>
 
@@ -159,7 +159,7 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
               Your Stablecoins Always Chasing the Best Yield
             </h2>
             <p className="text-base text-gray-300 max-w-2xl mx-auto mb-6">
-              Automatically move idle stables to the best yield platforms across chains with a single click.
+              {/* Automatically move idle stables to the best yield platforms across chains with a single click. */}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

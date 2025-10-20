@@ -7,24 +7,24 @@ import { StatCard } from '../ui/StatCard';
 export function HeroSection() {
   const features = [
     { 
-      icon: Fuel, 
-      title: 'Cross-Chain Gas Refuel',
-      description: 'Top up native gas on any chain with any token'
-    },
-    { 
-      icon: TrendingUp, 
-      title: 'Auto Yield Optimization',
-      description: 'Automatically move stables to best yield across chains'
-    },
-    { 
       icon: Globe, 
-      title: 'Multi-Chain Support',
-      description: 'Ethereum, Arbitrum, Avalanche, Polygon, BSC and more'
+      title: 'Multi-DEX Trading',
+      description: 'Trade on Hyperliquid, Aster, Reya, and more'
     },
     { 
       icon: ArrowRightLeft, 
-      title: 'Bridge & Execute',
-      description: '1-click cross-chain actions with unified assets'
+      title: 'Cross-Chain Native',
+      description: 'Bridge USDC from any chain to any DEX'
+    },
+    { 
+      icon: TrendingUp, 
+      title: 'Real-Time Data',
+      description: 'Live funding rates and market data'
+    },
+    { 
+      icon: Fuel, 
+      title: 'One-Click Positions',
+      description: 'Open long/short positions with leverage'
     },
   ];
 
@@ -53,17 +53,17 @@ export function HeroSection() {
           
           <h1 className="text-4xl lg:text-5xl font-bold mb-8 leading-tight tracking-tight">
             <span className="text-white bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent animate-fadeIn">
-              Cross-Chain DeFi Hub
+              Universal Perpetual Aggregator
             </span>
             <br />
             <span className="text-gray-400 animate-fadeIn font-light" style={{animationDelay: '0.2s'}}>
-              Gas Refuel + Yield Optimization
+              Trade Any Perpetual, Anywhere
             </span>
           </h1>
           
           <p className="text-base text-gray-300 mb-16 max-w-3xl mx-auto leading-relaxed font-normal animate-fadeIn" style={{animationDelay: '0.4s'}}>
-            Your stablecoins always chasing the best yield — automatically, across any chain. 
-            Refuel gas instantly and optimize yields with unified cross-chain DeFi actions powered by Avail Nexus SDK.
+            Trade perpetuals on Hyperliquid, Aster, Reya, and more — all from one unified interface. 
+            Bridge USDC from any chain and open positions with one click, powered by Avail Nexus SDK.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
@@ -90,8 +90,8 @@ export function HeroSection() {
           <div className="group relative bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-8 text-center shadow-2xl hover:shadow-3xl hover:border-white/25 transition-all duration-500 hover:scale-105 overflow-hidden ring-1 ring-white/5">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="relative z-10">
-              <div className="text-3xl font-bold text-white mb-4 group-hover:text-blue-400 transition-all duration-300 group-hover:scale-110">15+</div>
-              <p className="text-gray-400 font-medium text-xs leading-relaxed group-hover:text-gray-300 transition-colors duration-300">Supported Chains</p>
+              <div className="text-3xl font-bold text-white mb-4 group-hover:text-blue-400 transition-all duration-300 group-hover:scale-110">4+</div>
+              <p className="text-gray-400 font-medium text-xs leading-relaxed group-hover:text-gray-300 transition-colors duration-300">Perpetual DEXes</p>
               <div className="mt-4 flex items-center justify-center">
                 <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse group-hover:animate-ping"></div>
               </div>
@@ -100,8 +100,8 @@ export function HeroSection() {
           <div className="group relative bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-8 text-center shadow-2xl hover:shadow-3xl hover:border-white/25 transition-all duration-500 hover:scale-105 overflow-hidden ring-1 ring-white/5">
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="relative z-10">
-              <div className="text-3xl font-bold text-white mb-4 group-hover:text-green-400 transition-all duration-300 group-hover:scale-110">&lt; 5 min</div>
-              <p className="text-gray-400 font-medium text-xs leading-relaxed group-hover:text-gray-300 transition-colors duration-300">Settlement Time</p>
+              <div className="text-3xl font-bold text-white mb-4 group-hover:text-green-400 transition-all duration-300 group-hover:scale-110">4</div>
+              <p className="text-gray-400 font-medium text-xs leading-relaxed group-hover:text-gray-300 transition-colors duration-300">Supported Chains</p>
               <div className="mt-4 flex items-center justify-center">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse group-hover:animate-ping"></div>
               </div>
@@ -110,8 +110,8 @@ export function HeroSection() {
           <div className="group relative bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-8 text-center shadow-2xl hover:shadow-3xl hover:border-white/25 transition-all duration-500 hover:scale-105 overflow-hidden ring-1 ring-white/5">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="relative z-10">
-              <div className="text-3xl font-bold text-white mb-4 group-hover:text-purple-400 transition-all duration-300 group-hover:scale-110">1-2%</div>
-              <p className="text-gray-400 font-medium text-xs leading-relaxed group-hover:text-gray-300 transition-colors duration-300">Refuel Fee</p>
+              <div className="text-3xl font-bold text-white mb-4 group-hover:text-purple-400 transition-all duration-300 group-hover:scale-110">1-Click</div>
+              <p className="text-gray-400 font-medium text-xs leading-relaxed group-hover:text-gray-300 transition-colors duration-300">Position Opening</p>
               <div className="mt-4 flex items-center justify-center">
                 <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse group-hover:animate-ping"></div>
               </div>
