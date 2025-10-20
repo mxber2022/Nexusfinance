@@ -1,10 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Fuel, Zap, Globe, Shield, TrendingUp, ArrowRightLeft } from 'lucide-react';
 import { FeatureCard } from '../ui/FeatureCard';
 import { Badge } from '../ui/Badge';
 import { StatCard } from '../ui/StatCard';
 
 export function HeroSection() {
+  const [logoSet, setLogoSet] = useState(0);
+
+  // Define logo sets
+  const logoSets = [
+    // DEX logos
+    [
+      {
+        src: "https://hyperliquid.gitbook.io/hyperliquid-docs/~gitbook/image?url=https%3A%2F%2F2356094849-files.gitbook.io%2F%7E%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FyUdp569E6w18GdfqlGvJ%252Ficon%252FsIAjqhKKIUysM08ahKPh%252FHL-logoSwitchDISliStat.png%3Falt%3Dmedia%26token%3Da81fa25c-0510-4d97-87ff-3fb8944935b1&width=32&dpr=4&quality=100&sign=3e1219e3&sv=2",
+        alt: "Hyperliquid"
+      },
+      {
+        src: "https://s2.coinmarketcap.com/static/img/coins/64x64/36341.png",
+        alt: "Aster"
+      },
+      {
+        src: "https://cdn.prod.website-files.com/66b5e4e47712e879f0c5ef1b/686bcf104a9c1d2d2c69c5da_r.svg",
+        alt: "Reya"
+      }
+    ],
+    // Protocol logos
+    [
+      {
+        src: "/aave.jpg",
+        alt: "Aave"
+      },
+      {
+        src: "/euler.jpg",
+        alt: "Euler"
+      },
+      {
+        src: "/morpho.jpg",
+        alt: "Morpho"
+      }
+    ]
+  ];
+
+  // Rotate logo sets every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLogoSet(prev => (prev + 1) % logoSets.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [logoSets.length]);
+
   const features = [
     { 
       icon: Globe, 
@@ -65,6 +110,109 @@ export function HeroSection() {
             Trade perpetuals on Hyperliquid, Aster, Reya, and more — all from one unified interface. 
             Bridge USDC from any chain and open positions with one click, powered by Avail Nexus SDK.
           </p>
+
+          {/* Professional Circular Animation */}
+          <div className="relative mb-20 flex justify-center items-center">
+            <div className="relative w-96 h-96 flex items-center justify-center">
+               {/* Background glow effect */}
+               <div className="absolute inset-0 bg-gradient-to-r from-gray-500/5 via-white/5 to-gray-500/5 rounded-full blur-3xl animate-pulse-glow"></div>
+               
+               {/* Outer rotating ring with gradient */}
+               <div className="absolute inset-0 rounded-full animate-spin-slow">
+                 <div className="w-full h-full rounded-full border-2 border-transparent bg-gradient-to-r from-white/20 via-gray-300/20 to-white/20 p-1">
+                   <div className="w-full h-full rounded-full bg-black/90 backdrop-blur-xl"></div>
+                 </div>
+                 {/* Orbiting dots */}
+                 <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-3 w-5 h-5 bg-gradient-to-r from-white to-gray-300 rounded-full shadow-2xl shadow-white/30 animate-pulse-orb"></div>
+                 <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-3 w-4 h-4 bg-gradient-to-r from-gray-300 to-white rounded-full shadow-2xl shadow-gray-300/30 animate-pulse-orb" style={{animationDelay: '1s'}}></div>
+                 <div className="absolute left-0 top-1/2 transform -translate-x-3 -translate-y-1/2 w-3 h-3 bg-gradient-to-r from-white to-gray-200 rounded-full shadow-2xl shadow-white/20 animate-pulse-orb" style={{animationDelay: '2s'}}></div>
+                 <div className="absolute right-0 top-1/2 transform translate-x-3 -translate-y-1/2 w-4 h-4 bg-gradient-to-r from-gray-200 to-white rounded-full shadow-2xl shadow-gray-200/30 animate-pulse-orb" style={{animationDelay: '3s'}}></div>
+               </div>
+               
+               {/* Inner rotating ring */}
+               <div className="absolute inset-12 rounded-full animate-spin-reverse">
+                 <div className="w-full h-full rounded-full border border-white/20 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-sm"></div>
+                 {/* Inner orbiting elements */}
+                 <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white/80 rounded-full animate-pulse-orb"></div>
+                 <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-white/60 rounded-full animate-pulse-orb" style={{animationDelay: '1.5s'}}></div>
+               </div>
+               
+               {/* Center content with Avail logo */}
+               <div className="relative z-20 text-center">
+                 <div className="flex items-center justify-center">
+                   <div className="relative">
+                     {/* Glowing background ring */}
+                     <div className="absolute inset-0 w-24 h-24 mx-auto bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-xl animate-pulse-glow"></div>
+                     
+                     {/* Rotating outer ring */}
+                     <div className="absolute inset-0 w-24 h-24 mx-auto border border-white/20 rounded-full animate-spin" style={{animationDuration: '8s'}}></div>
+                     
+                     {/* Main logo with enhanced animation */}
+                     <img 
+                       src="https://www.availproject.org/_next/static/media/grow.1113097f.png" 
+                       alt="Avail" 
+                       className="relative w-20 h-20 object-contain animate-bounce-slow"
+                     />
+                     
+                     {/* Floating particles around logo */}
+                     <div className="absolute -top-2 -left-2 w-1 h-1 bg-white/60 rounded-full animate-float-1"></div>
+                     <div className="absolute -top-1 -right-3 w-1.5 h-1.5 bg-blue-400/60 rounded-full animate-float-2"></div>
+                     <div className="absolute -bottom-2 -left-1 w-1 h-1 bg-purple-400/60 rounded-full animate-float-3"></div>
+                     <div className="absolute -bottom-1 -right-2 w-1 h-1 bg-pink-400/60 rounded-full animate-float-4"></div>
+                   </div>
+                 </div>
+               </div>
+               
+               {/* Floating protocols coming together */}
+               <div className="absolute inset-0">
+                 {/* Protocol 1 - starts top-left, moves to top */}
+                 <div className="absolute top-1/4 left-1/4 animate-float-together-1">
+                   <div className="relative">
+                     {/* Glow effect */}
+                     <div className="absolute inset-0 w-10 h-10 bg-blue-500/20 rounded-full blur-sm animate-pulse"></div>
+                     <img 
+                       src={logoSets[logoSet][0].src} 
+                       alt={logoSets[logoSet][0].alt} 
+                       className="relative w-8 h-8 rounded-full object-contain transition-all duration-1000 ease-out drop-shadow-lg"
+                     />
+                   </div>
+                 </div>
+                 
+                 {/* Protocol 2 - starts bottom-right, moves to right */}
+                 <div className="absolute bottom-1/4 right-1/4 animate-float-together-2">
+                   <div className="relative">
+                     {/* Glow effect */}
+                     <div className="absolute inset-0 w-10 h-10 bg-purple-500/20 rounded-full blur-sm animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                     <img 
+                       src={logoSets[logoSet][1].src} 
+                       alt={logoSets[logoSet][1].alt} 
+                       className="relative w-8 h-8 rounded-full object-contain transition-all duration-1000 ease-out drop-shadow-lg"
+                     />
+                   </div>
+                 </div>
+                 
+                 {/* Protocol 3 - starts top-right, moves to bottom */}
+                 <div className="absolute top-1/3 right-1/3 animate-float-together-3">
+                   <div className="relative">
+                     {/* Glow effect */}
+                     <div className="absolute inset-0 w-10 h-10 bg-pink-500/20 rounded-full blur-sm animate-pulse" style={{animationDelay: '1s'}}></div>
+                     <img 
+                       src={logoSets[logoSet][2].src} 
+                       alt={logoSets[logoSet][2].alt} 
+                       className="relative w-8 h-8 rounded-full object-contain transition-all duration-1000 ease-out drop-shadow-lg"
+                     />
+                   </div>
+                 </div>
+               </div>
+              
+              
+               {/* Floating particles */}
+               <div className="absolute top-1/3 left-1/3 w-1 h-1 bg-white/40 rounded-full animate-float-1"></div>
+               <div className="absolute top-2/3 right-1/3 w-1.5 h-1.5 bg-gray-300/50 rounded-full animate-float-2"></div>
+               <div className="absolute bottom-1/3 left-2/3 w-1 h-1 bg-white/30 rounded-full animate-float-3"></div>
+               <div className="absolute top-2/3 left-1/4 w-1 h-1 bg-gray-200/40 rounded-full animate-float-4"></div>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {features.map((feature, index) => (
