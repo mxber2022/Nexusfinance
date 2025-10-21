@@ -106,7 +106,7 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
 
       {/* Features Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="relative bg-black/20 backdrop-blur-2xl border border-white/15 rounded-3xl p-12 shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden ring-1 ring-white/5">
+        <div className="relative bg-black/20 backdrop-blur-2xl border border-white/15 rounded-3xl p-12 shadow-2xl hover:bg-black/30 hover:border-white/25 hover:shadow-3xl transition-all duration-500 overflow-hidden ring-1 ring-white/5">
           {/* Subtle background elements */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(147,51,234,0.05)_0%,transparent_50%)]"></div>
           <div className="absolute top-0 left-0 w-80 h-80 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"></div>
@@ -144,16 +144,14 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
 
       {/* FlowFi Yield Optimization Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="relative bg-gradient-to-br from-green-500/10 via-emerald-500/5 to-teal-500/10 backdrop-blur-2xl border border-green-500/20 rounded-3xl p-12 shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden ring-1 ring-green-500/10">
+        <div className="relative bg-black/20 backdrop-blur-2xl border border-white/15 rounded-3xl p-12 shadow-2xl hover:bg-black/30 hover:border-white/25 hover:shadow-3xl transition-all duration-500 overflow-hidden ring-1 ring-white/5">
           {/* Subtle background elements */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(34,197,94,0.05)_0%,transparent_50%)]"></div>
-          <div className="absolute top-0 left-0 w-80 h-80 bg-gradient-to-br from-green-500/5 to-emerald-500/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-teal-500/5 to-cyan-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(255,255,255,0.02)_0%,transparent_50%)]"></div>
           
           <div className="relative z-10 text-center mb-16">
             <div className="inline-flex items-center px-3 py-1.5 bg-black/20 backdrop-blur-2xl border border-white/15 rounded-full text-gray-200 text-xs font-medium mb-4 shadow-xl">
               {/* <TrendingUp className="h-3 w-3 mr-1.5 text-green-400" /> */}
-              <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+              <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
               
                Yield Optimization
             </div>
@@ -190,9 +188,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
           </div>
 
           <div className="relative z-10 grid md:grid-cols-3 gap-8">
-            <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-green-500/50 transition-all duration-500 group">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="h-8 w-8 text-green-400" />
+            <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-white/30 transition-all duration-500 group">
+              <div className="w-16 h-16 bg-gradient-to-br from-gray-500/20 to-white/20 border border-white/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-3">Auto Yield Optimization</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
@@ -200,9 +198,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
               </p>
             </div>
             
-            <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-green-500/50 transition-all duration-500 group">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Zap className="h-8 w-8 text-blue-400" />
+            <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-white/30 transition-all duration-500 group">
+              <div className="w-16 h-16 bg-gradient-to-br from-gray-500/20 to-white/20 border border-white/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Zap className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-3">1-Click Cross-Chain</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
@@ -210,9 +208,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
               </p>
             </div>
             
-            <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-green-500/50 transition-all duration-500 group">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <Globe className="h-8 w-8 text-purple-400" />
+            <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-white/30 transition-all duration-500 group">
+              <div className="w-16 h-16 bg-gradient-to-br from-gray-500/20 to-white/20 border border-white/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Globe className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-lg font-semibold text-white mb-3">Auto Rebalancing</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
@@ -225,16 +223,14 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
 
       {/* PerpPort Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="relative bg-gradient-to-br from-purple-500/10 via-pink-500/5 to-purple-500/10 backdrop-blur-2xl border border-purple-500/20 rounded-3xl p-12 shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden ring-1 ring-purple-500/10">
+        <div className="relative bg-black/20 backdrop-blur-2xl border border-white/15 rounded-3xl p-12 shadow-2xl hover:bg-black/30 hover:border-white/25 hover:shadow-3xl transition-all duration-500 overflow-hidden ring-1 ring-white/5">
           {/* Subtle background elements */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(168,85,247,0.05)_0%,transparent_50%)]"></div>
-          <div className="absolute top-0 left-0 w-80 h-80 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-pink-500/5 to-purple-500/5 rounded-full blur-3xl"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(255,255,255,0.02)_0%,transparent_50%)]"></div>
           
           <div className="relative z-10 text-center mb-16">
             <div className="inline-flex items-center px-3 py-1.5 bg-black/20 backdrop-blur-2xl border border-white/15 rounded-full text-gray-200 text-xs font-medium mb-4 shadow-xl">
               {/* <Zap className="h-3 w-3 mr-1.5 text-purple-400" /> */}
-              <div className="w-2 h-2 bg-purple-400 rounded-full mr-2 animate-pulse"></div>
+              <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
               Cross-Chain Perpetual Deposits
             </div>
             <h2 className="text-2xl font-bold text-white mb-4">
@@ -259,9 +255,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
         </div>
 
         <div className="relative z-10 grid md:grid-cols-3 gap-8">
-          <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-purple-500/50 transition-all duration-500 group">
-            <div className="w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Zap className="h-8 w-8 text-purple-400" />
+          <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-white/30 transition-all duration-500 group">
+            <div className="w-16 h-16 bg-gradient-to-br from-gray-500/20 to-white/20 border border-white/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Zap className="h-8 w-8 text-white" />
             </div>
             <h3 className="text-lg font-semibold text-white mb-3">One-Click Deposits</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -269,9 +265,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
             </p>
           </div>
           
-          <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-blue-500/50 transition-all duration-500 group">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Globe className="h-8 w-8 text-blue-400" />
+          <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-white/30 transition-all duration-500 group">
+            <div className="w-16 h-16 bg-gradient-to-br from-gray-500/20 to-white/20 border border-white/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <Globe className="h-8 w-8 text-white" />
             </div>
             <h3 className="text-lg font-semibold text-white mb-3">Multi-DEX Support</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
@@ -279,9 +275,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
             </p>
           </div>
           
-          <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-green-500/50 transition-all duration-500 group">
-            <div className="w-16 h-16 bg-gradient-to-br from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <ArrowRight className="h-8 w-8 text-green-400" />
+          <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-white/30 transition-all duration-500 group">
+            <div className="w-16 h-16 bg-gradient-to-br from-gray-500/20 to-white/20 border border-white/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
+              <ArrowRight className="h-8 w-8 text-white" />
             </div>
             <h3 className="text-lg font-semibold text-white mb-3">Cross-Chain Native</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
