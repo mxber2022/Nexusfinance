@@ -57,8 +57,12 @@ export function Header({ currentStep, onNavigateHome, onNavigateToRefuel, onNavi
         <div className="flex items-center justify-between">
           {/* Left Section - Brand */}
           <div className="flex items-center space-x-3">
-            <div className="flex items-center justify-center w-8 h-8 bg-black border border-gray-600 rounded-lg shadow-inner">
-              <div className="w-3 h-3 bg-gray-800 rounded-sm border border-gray-700"></div>
+            <div className="flex items-center justify-center w-9 h-9 rounded-lg overflow-hidden">
+              <img 
+                src="/logo2.png" 
+                alt="Nexus Finance Logo" 
+                className="w-12 h-12 object-contain rounded-lg"
+              />
             </div>
             <div>
               <div className="text-base font-medium text-white">

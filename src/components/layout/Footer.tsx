@@ -14,8 +14,12 @@ export function Footer() {
             {/* Brand Section */}
             <div>
               <div className="flex items-center space-x-3 mb-4 group">
-                <div className="flex items-center justify-center w-8 h-8 bg-black border border-gray-600 rounded-lg shadow-inner group-hover:scale-105 transition-transform duration-300">
-                  <div className="w-3 h-3 bg-gray-800 rounded-sm border border-gray-700"></div>
+                <div className="flex items-center justify-center w-9 h-9 group-hover:scale-105 transition-transform duration-300">
+                  <img 
+                    src="/logo2.png" 
+                    alt="Nexus Finance Logo" 
+                    className="w-8 h-8 object-contain rounded-lg"
+                  />
                 </div>
                 <div>
                   <div className="text-lg font-bold text-gray-100 group-hover:text-white transition-colors duration-300">

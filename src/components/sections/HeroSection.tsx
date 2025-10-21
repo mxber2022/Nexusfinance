@@ -6,6 +6,21 @@ import { StatCard } from '../ui/StatCard';
 
 export function HeroSection() {
   const [logoSet, setLogoSet] = useState(0);
+  const [centralLogo, setCentralLogo] = useState(0);
+
+  // Define central logo sets
+  const centralLogos = [
+    {
+      src: "/logo3.png",
+      alt: "Nexus Finance",
+      size: "w-28 h-28"
+    },
+    {
+      src: "https://www.availproject.org/_next/static/media/grow.1113097f.png",
+      alt: "Avail",
+      size: "w-20 h-20"
+    }
+  ];
 
   // Define logo sets
   const logoSets = [
@@ -57,6 +72,15 @@ export function HeroSection() {
 
     return () => clearInterval(interval);
   }, [logoSets.length]);
+
+  // Rotate central logo every 2 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCentralLogo(prev => (prev + 1) % centralLogos.length);
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [centralLogos.length]);
 
   const features = [
     { 
@@ -156,11 +180,27 @@ export function HeroSection() {
                      <div className="absolute inset-0 w-24 h-24 mx-auto border border-transparent rounded-full animate-spin" style={{animationDuration: '8s'}}></div>
                      
                      {/* Main logo with enhanced animation */}
-                     <img 
-                       src="https://www.availproject.org/_next/static/media/grow.1113097f.png" 
-                       alt="Avail" 
-                       className="relative w-20 h-20 object-contain animate-bounce-slow"
-                     />
+                     <div className="relative">
+                       <img 
+                         src={centralLogos[centralLogo].src} 
+                         alt={centralLogos[centralLogo].alt} 
+                         className={`${centralLogos[centralLogo].size} object-contain transition-all duration-700 ease-in-out transform hover:scale-110`}
+                         style={{
+                           animation: 'pulse-glow 3s ease-in-out infinite, float-gentle 4s ease-in-out infinite',
+                           animationDelay: `${centralLogo * 0.5}s`
+                         }}
+                       />
+                       {/* Glow effect that changes with logo */}
+                       <div 
+                         className="absolute inset-0 rounded-full blur-xl opacity-60"
+                         style={{
+                           background: centralLogo === 0 
+                             ? 'radial-gradient(circle, rgba(0,255,0,0.3) 0%, transparent 70%)'
+                             : 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)',
+                           animation: 'pulse-glow 3s ease-in-out infinite'
+                         }}
+                       />
+                     </div>
                      
                      {/* Floating particles around logo */}
                      <div className="absolute -top-2 -left-2 w-1 h-1 bg-white/60 rounded-full animate-float-1"></div>
