@@ -544,7 +544,7 @@ export function GasRefuelPage({ onRefuelComplete }: GasRefuelPageProps) {
                         </div>
                         <div className="flex justify-between font-semibold text-gray-200">
                           <span>Total cost:</span>
-                          <span>{(parseFloat(estimatedFee)).toFixed(4)} {sourceChain.nativeCurrency.symbol}</span>
+                          <span>{(parseFloat(refuelAmount) + parseFloat(estimatedFee)).toFixed(8)} {sourceChain.nativeCurrency.symbol}</span>
                         </div>
                       </div>
                     </div>
