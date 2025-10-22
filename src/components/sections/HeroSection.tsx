@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Fuel, Zap, Globe, Shield, TrendingUp, ArrowRightLeft } from 'lucide-react';
+import { Fuel, Zap, Globe, Shield, TrendingUp, ArrowRightLeft, BarChart3 } from 'lucide-react';
 import { FeatureCard } from '../ui/FeatureCard';
 import { Badge } from '../ui/Badge';
 import { StatCard } from '../ui/StatCard';
@@ -91,7 +91,7 @@ export function HeroSection() {
     { 
       icon: ArrowRightLeft, 
       title: 'Cross-Chain Native',
-      description: 'Bridge USDC from any chain to any DEX'
+      description: 'crosschain liquidity from anywhere and Open Positions to any DEX'
     },
     { 
       icon: TrendingUp, 
@@ -99,9 +99,9 @@ export function HeroSection() {
       description: 'Live funding rates and market data'
     },
     { 
-      icon: Fuel, 
+      icon: BarChart3, 
       title: 'One-Click Positions',
-      description: 'Open long/short positions with leverage'
+      description: 'Open long/short positions with leverage on any PERP DEX'
     },
   ];
 
@@ -301,6 +301,7 @@ export function HeroSection() {
             <div className="relative z-10">
               <div className="text-3xl font-bold text-white mb-4 group-hover:text-blue-400 transition-all duration-300 group-hover:scale-110">4+</div>
               <p className="text-gray-400 font-medium text-xs leading-relaxed group-hover:text-gray-300 transition-colors duration-300">Perpetual DEXes</p>
+              <p className="text-gray-500 text-xs mt-2 group-hover:text-gray-400 transition-colors duration-300">Hyperliquid, Aster, Reya & more</p>
               <div className="mt-4 flex items-center justify-center">
                 <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse group-hover:animate-ping"></div>
               </div>
@@ -309,8 +310,9 @@ export function HeroSection() {
           <div className="group relative bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-8 text-center shadow-2xl hover:shadow-3xl hover:border-white/25 transition-all duration-500 hover:scale-105 overflow-hidden ring-1 ring-white/5">
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="relative z-10">
-              <div className="text-3xl font-bold text-white mb-4 group-hover:text-green-400 transition-all duration-300 group-hover:scale-110">4</div>
-              <p className="text-gray-400 font-medium text-xs leading-relaxed group-hover:text-gray-300 transition-colors duration-300">Supported Chains</p>
+              <div className="text-3xl font-bold text-white mb-4 group-hover:text-green-400 transition-all duration-300 group-hover:scale-110">Auto Yield</div>
+              <p className="text-gray-400 font-medium text-xs leading-relaxed group-hover:text-gray-300 transition-colors duration-300">Yield Optimization</p>
+              <p className="text-gray-500 text-xs mt-2 group-hover:text-gray-400 transition-colors duration-300">Best rates across Aave, Morpho, Compound</p>
               <div className="mt-4 flex items-center justify-center">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse group-hover:animate-ping"></div>
               </div>
@@ -319,8 +321,9 @@ export function HeroSection() {
           <div className="group relative bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-8 text-center shadow-2xl hover:shadow-3xl hover:border-white/25 transition-all duration-500 hover:scale-105 overflow-hidden ring-1 ring-white/5">
             <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
             <div className="relative z-10">
-              <div className="text-3xl font-bold text-white mb-4 group-hover:text-purple-400 transition-all duration-300 group-hover:scale-110">1-Click</div>
-              <p className="text-gray-400 font-medium text-xs leading-relaxed group-hover:text-gray-300 transition-colors duration-300">Position Opening</p>
+              <div className="text-3xl font-bold text-white mb-4 group-hover:text-purple-400 transition-all duration-300 group-hover:scale-110">Refuel</div>
+              <p className="text-gray-400 font-medium text-xs leading-relaxed group-hover:text-gray-300 transition-colors duration-300">Gas Refuel</p>
+              <p className="text-gray-500 text-xs mt-2 group-hover:text-gray-400 transition-colors duration-300">Cross-chain gas from any token</p>
               <div className="mt-4 flex items-center justify-center">
                 <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse group-hover:animate-ping"></div>
               </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { HeroSection } from '../components/sections/HeroSection';
 import { Button } from '../components/ui/Button';
-import { ArrowRight, Fuel, Zap, Globe, TrendingUp } from 'lucide-react';
+import { ArrowRight, Fuel, Zap, Globe, TrendingUp, Info } from 'lucide-react';
 
 interface HomePageProps {
   onGetStarted: () => void;
@@ -18,8 +18,8 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
     },
     {
       icon: Zap,
-      title: 'Cross-Chain Native',
-      description: 'Bridge USDC from any chain and open positions with one click, powered by Avail Nexus SDK.'
+      title: 'Nexus Bridge & Execute',
+      description: 'Bridge and execute trades across any chain with one click, powered by Avail Nexus SDK.'
     },
     {
       icon: TrendingUp,
@@ -42,7 +42,7 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
           <div className="relative z-10 text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 bg-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-full text-gray-300 text-sm font-medium mb-6">
               <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></div>
-              How It Works
+              How PerpPort Works
             </div>
                 <h2 className="text-2xl font-bold text-gray-100 mb-6">
                   {/* How It Works */}
@@ -74,8 +74,12 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
                 </div>
                 <h3 className="text-lg font-semibold text-gray-100 mb-4 group-hover:text-white transition-colors duration-300">Choose Your Token</h3>
                 <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                  Select ETH, USDC, USDT, or SOL and specify the amount to deposit
+                  Select ETH, USDC, USDT and specify the amount to deposit.
                 </p>
+                <div className="mt-3 flex items-center justify-center space-x-1">
+                  <Info className="w-3 h-3 text-gray-600 opacity-50" />
+                  <span className="text-gray-600 text-xs opacity-50">Nexus SDK automatically bridges your tokens</span>
+                </div>
               </div>
             </div>
           
@@ -85,9 +89,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
                 <div className="w-20 h-20 bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 group-hover:shadow-xl">
                   <span className="text-3xl font-bold text-purple-400 group-hover:text-white transition-colors duration-300">3</span>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-100 mb-4 group-hover:text-white transition-colors duration-300">Bridge & Trade</h3>
+                <h3 className="text-lg font-semibold text-gray-100 mb-4 group-hover:text-white transition-colors duration-300">Trade</h3>
                 <p className="text-gray-400 text-sm leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                  Nexus SDK automatically bridges your tokens and opens positions on your chosen DEX
+                  Open long/short positions on your chosen DEX in one place.
                 </p>
               </div>
             </div>
@@ -130,7 +134,7 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
               return (
                 <div key={index} className="relative bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-8 transition-all duration-500 shadow-2xl hover:shadow-3xl hover:border-white/25 group hover:scale-105 animate-fadeIn overflow-hidden ring-1 ring-white/5" style={{animationDelay: `${0.6 + index * 0.2}s`}}>
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  <div className="relative z-10">
+                  <div className="relative z-10 text-center">
                     <Icon className="h-10 w-10 text-gray-300 group-hover:text-white transition-all duration-500 mx-auto mb-6 group-hover:scale-110 group-hover:rotate-3" />
                     <h3 className="text-lg font-semibold text-gray-100 mb-5 group-hover:text-white transition-colors duration-300">{feature.title}</h3>
                     <p className="text-gray-400 leading-relaxed text-sm group-hover:text-gray-300 transition-colors duration-300">{feature.description}</p>
@@ -168,9 +172,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
                 className="px-6 py-3 bg-black/60 backdrop-blur-2xl border border-white/15 text-white hover:bg-black/80 hover:border-white/25 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl rounded-2xl"
               >
                 <span className="flex items-center">
-                  <TrendingUp className="h-4 w-4 mr-2" />
-                  Start NexusFinance
-                  <ArrowRight className="h-4 w-4 ml-2" />
+                  {/* <TrendingUp className="h-4 w-4 mr-2" /> */}
+                    Yield Optimization 
+                  {/* <ArrowRight className="h-4 w-4 ml-2" /> */}
                 </span>
               </button>
               
@@ -181,7 +185,7 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
                 <span className="flex items-center">
                   <Fuel className="h-4 w-4 mr-2" />
                   Gas Refuel
-                  <ArrowRight className="h-4 w-4 ml-2" />
+                  {/* <ArrowRight className="h-4 w-4 ml-2" /> */}
                 </span>
               </button>
             </div>
@@ -202,9 +206,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
               <div className="w-16 h-16 bg-gradient-to-br from-gray-500/20 to-white/20 border border-white/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Zap className="h-8 w-8 text-white" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-3">1-Click Cross-Chain</h3>
+              <h3 className="text-lg font-semibold text-white mb-3">Nexus Bridge & Execute</h3>
               <p className="text-gray-400 text-sm leading-relaxed">
-                Bridge & Execute moves liquidity to target chain and deposits into best yield pool
+                Bridge and execute moves liquidity to target chain and deposits into best yield pool
               </p>
             </div>
             
@@ -248,7 +252,7 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
                 <span className="flex items-center">
                   <Zap className="h-4 w-4 mr-2" />
                   Launch PerpPort
-                  <ArrowRight className="h-4 w-4 ml-2" />
+                  {/* <ArrowRight className="h-4 w-4 ml-2" /> */}
                 </span>
               </button>
             </div>
@@ -279,9 +283,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
             <div className="w-16 h-16 bg-gradient-to-br from-gray-500/20 to-white/20 border border-white/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <ArrowRight className="h-8 w-8 text-white" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-3">Cross-Chain Native</h3>
+            <h3 className="text-lg font-semibold text-white mb-3">Nexus Bridge & Execute</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Deposit from any supported chain without manual bridging or network switching
+              Bridge and execute deposits from any supported chain without manual bridging or network switching
             </p>
           </div>
         </div>
