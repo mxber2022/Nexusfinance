@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNexus } from '@avail-project/nexus-widgets';
 import { useAccount } from 'wagmi';
 import { useAppKit, useAppKitAccount } from '@reown/appkit/react';
-import { AlertCircle, ExternalLink, Zap, Download, TrendingUp, BarChart3 } from 'lucide-react';
+import { AlertCircle, ExternalLink, Zap, Download, TrendingUp, BarChart3, TrendingDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useHyperliquid } from '../hooks/useHyperliquid';
 import { useAster } from '../hooks/useAster';
 import { useHyperliquidData } from '../hooks/useHyperliquidData';
 import { useAsterData } from '../hooks/useAsterData';
 import { useReyaData } from '../hooks/useReyaData';
+import { useHyperliquidPosition } from '../hooks/useHyperliquidPosition';
 import { MarketDataDialog } from '../components/MarketDataDialog';
 import { PositionsDisplay } from '../components/PositionsDisplay';
 import { DEXES } from '../constants/dexes';
@@ -23,6 +24,7 @@ export const PerpPortPage: React.FC = () => {
   const { address: account } = useAppKitAccount();
   const { depositToHyperliquid, withdrawFromHyperliquid, isDepositing: isHyperliquidDepositing, isWithdrawing: isHyperliquidWithdrawing, checkNetwork, switchToArbitrum } = useHyperliquid(true); // Using mainnet
   const { depositToAster, isDepositing: isAsterDepositing } = useAster(true); // Using mainnet
+  const { getUserPositions } = useHyperliquidPosition(true); // For fetching positions PnL
   const { fundingData, bestRates, isLoading: isHyperliquidLoading, error: hyperliquidError, lastUpdated, refreshData } = useHyperliquidData();
   const { fundingData: asterFundingData, bestRates: asterBestRates, isLoading: isAsterLoading, error: asterError, lastUpdated: asterLastUpdated, refreshData: refreshAsterData } = useAsterData();
   const { fundingData: reyaFundingData, bestRates: reyaBestRates, isLoading: isReyaLoading, error: reyaError, lastUpdated: reyaLastUpdated, refreshData: refreshReyaData } = useReyaData();
@@ -33,6 +35,7 @@ export const PerpPortPage: React.FC = () => {
   const [amount, setAmount] = useState('');
   const [isMarketDialogOpen, setIsMarketDialogOpen] = useState(false);
   const [isPositionsDialogOpen, setIsPositionsDialogOpen] = useState(false);
+  const [totalPnL, setTotalPnL] = useState<number>(0);
   
   // Auto-select Arbitrum when Hyperliquid is selected
   useEffect(() => {
@@ -87,6 +90,30 @@ export const PerpPortPage: React.FC = () => {
       simulateBridge();
     }
   }, [amount, selectedToken, selectedChain, sdk, isSdkInitialized]);
+
+  // Fetch total PnL for positions indicator
+  const fetchTotalPnL = async () => {
+    if (!isConnected) return;
+    
+    try {
+      const positions = await getUserPositions();
+      const total = positions.reduce((sum, pos) => sum + (pos.unrealizedPnl || 0), 0);
+      setTotalPnL(total);
+    } catch (error) {
+      console.error('Error fetching total PnL:', error);
+      setTotalPnL(0);
+    }
+  };
+
+  // Fetch PnL when connected
+  useEffect(() => {
+    if (isConnected) {
+      fetchTotalPnL();
+      // Refresh PnL every 30 seconds
+      const interval = setInterval(fetchTotalPnL, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [isConnected, getUserPositions]);
 
   const handleDeposit = async () => {
     if (!isConnected) {
@@ -492,26 +519,50 @@ export const PerpPortPage: React.FC = () => {
       {/* Floating Action Buttons */}
       <div className="fixed bottom-6 right-6 z-[9999] flex flex-col space-y-3">
         {/* Positions Button */}
-        <button
-          onClick={() => {
-            setIsPositionsDialogOpen(true);
-            setIsMarketDialogOpen(false); // Close market dialog if open
-          }}
-          className="w-12 h-12 bg-gradient-to-br from-blue-500/30 to-purple-500/30 backdrop-blur-xl border border-blue-400/40 rounded-full text-blue-300 shadow-2xl hover:shadow-blue-500/25 hover:shadow-3xl transition-all duration-500 group ring-1 ring-blue-400/30 hover:ring-blue-300/50 hover:scale-110 flex items-center justify-center overflow-hidden animate-pulse hover:animate-none"
-          title="View Positions"
-        >
-          {/* Animated background glow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
+        <div className="relative">
+          <button
+            onClick={() => {
+              setIsPositionsDialogOpen(true);
+              setIsMarketDialogOpen(false); // Close market dialog if open
+            }}
+            className="w-12 h-12 bg-gradient-to-br from-blue-500/30 to-purple-500/30 backdrop-blur-xl border border-blue-400/40 rounded-full text-blue-300 shadow-2xl hover:shadow-blue-500/25 hover:shadow-3xl transition-all duration-500 group ring-1 ring-blue-400/30 hover:ring-blue-300/50 hover:scale-110 flex items-center justify-center overflow-hidden animate-pulse hover:animate-none"
+            title="View Positions"
+          >
+            {/* Animated background glow */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
+            
+            {/* Pulsing ring animation */}
+            <div className="absolute inset-0 rounded-full border-2 border-blue-400/30 animate-ping"></div>
+            
+            {/* Icon with bounce animation */}
+            <TrendingUp className="w-5 h-5 group-hover:text-white transition-all duration-500 group-hover:animate-bounce relative z-10" />
+            
+            {/* Subtle floating animation */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/10 to-purple-400/10 animate-pulse"></div>
+          </button>
           
-          {/* Pulsing ring animation */}
-          <div className="absolute inset-0 rounded-full border-2 border-blue-400/30 animate-ping"></div>
-          
-          {/* Icon with bounce animation */}
-          <TrendingUp className="w-5 h-5 group-hover:text-white transition-all duration-500 group-hover:animate-bounce relative z-10" />
-          
-          {/* Subtle floating animation */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/10 to-purple-400/10 animate-pulse"></div>
-        </button>
+          {/* PnL Indicator Badge */}
+          {isConnected && totalPnL !== 0 && (
+            <div className={`absolute -top-9 -right-2 px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-sm border ${
+              totalPnL > 0 
+                ? 'bg-green-500/20 text-green-300 border-green-500/40' 
+                : 'bg-red-500/20 text-red-300 border-red-500/40'
+            }`}>
+              <div className="flex items-center space-x-1.5">
+                {totalPnL > 0 ? (
+                   <TrendingUp className="w-3 h-3" />
+                  // <ArrowUp className="w-3 h-3" />
+                ) : (
+                   <TrendingDown className="w-3 h-3" /> 
+                  // <ArrowDown className="w-3 h-3" />
+                )}
+                <span className="whitespace-nowrap font-mono">
+                  {totalPnL > 0 ? '+' : ''}${Math.abs(totalPnL).toFixed(2)}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Market Data Button */}
         <button
