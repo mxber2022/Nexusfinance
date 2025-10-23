@@ -25,13 +25,13 @@ export function Footer() {
                   <div className="text-lg font-bold text-gray-100 group-hover:text-white transition-colors duration-300">
                     NexusFinance
                   </div>
-                  <div className="text-xs text-gray-500 group-hover:text-gray-400 transition-colors duration-300">Cross-Chain DeFi Hub</div>
+                  <div className="text-[10px] text-gray-500 group-hover:text-gray-400 transition-colors duration-300 font-bold tracking-wider uppercase">KING OF PERPS</div>
                 </div>
               </div>
               
               <p className="text-gray-400 mb-6 text-sm leading-relaxed max-w-md">
-                Cross-chain DeFi hub powered by Avail Nexus SDK. 
-                Refuel gas instantly and optimize yields with unified cross-chain actions.
+                The ultimate perpetual trading platform. 
+                Deposit to your favorite perpetual DEXs from any chain with one click.
               </p>
               
               {/* Social Links */}
@@ -52,10 +52,10 @@ export function Footer() {
             <div className="text-center lg:text-right space-y-4">
               <div className="group">
                 <h4 className="text-base font-medium text-gray-200 mb-2 group-hover:text-white transition-colors duration-300">
-                  Cross-Chain DeFi Hub
+                  Perpetual Trading Hub
                 </h4>
                 <p className="text-sm text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                  Gas refueling and yield optimization across all chains
+                  Seamless deposits to Hyperliquid, Aster, and Reya from any chain
                 </p>
               </div>
               
@@ -74,7 +74,7 @@ export function Footer() {
           <div className="relative z-10 border-t border-white/15 mt-8 pt-6">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
               <div className="text-gray-400 text-xs hover:text-gray-300 transition-colors duration-300">
-                © 2024 NexusFinance. Built for the future of cross-chain DeFi.
+                © 2024 NexusFinance. Built for the future of perpetual trading.
               </div>
               <div className="flex items-center space-x-6">
                 <div className="flex items-center space-x-2 text-xs text-gray-400 hover:text-white transition-colors duration-300 group cursor-default">

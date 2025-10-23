@@ -68,7 +68,7 @@ export function Header({ currentStep, onNavigateHome, onNavigateToRefuel, onNavi
               <div className="text-base font-medium text-white">
                 NexusFinance
               </div>
-              <div className="text-xs text-gray-400">Cross-Chain DeFi Hub</div>
+              <div className="text-[10px] text-gray-400 font-bold tracking-wider uppercase">KING OF PERPS</div>
             </div>
           </div>
 
