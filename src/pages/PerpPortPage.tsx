@@ -9,6 +9,7 @@ import { useHyperliquidData } from '../hooks/useHyperliquidData';
 import { useAsterData } from '../hooks/useAsterData';
 import { useReyaData } from '../hooks/useReyaData';
 import { MarketDataDialog } from '../components/MarketDataDialog';
+import { PositionsDisplay } from '../components/PositionsDisplay';
 import { DEXES } from '../constants/dexes';
 import { CHAINS } from '../constants/chains';
 import { TOKENS } from '../constants/tokens';
@@ -31,6 +32,7 @@ export const PerpPortPage: React.FC = () => {
   const [selectedToken, setSelectedToken] = useState(TOKENS.find(token => token.symbol === 'USDC') || TOKENS[0]);
   const [amount, setAmount] = useState('');
   const [isMarketDialogOpen, setIsMarketDialogOpen] = useState(false);
+  const [isPositionsDialogOpen, setIsPositionsDialogOpen] = useState(false);
   
   // Auto-select Arbitrum when Hyperliquid is selected
   useEffect(() => {
@@ -487,24 +489,52 @@ export const PerpPortPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Floating Market Data Button */}
-      <button
-        onClick={() => setIsMarketDialogOpen(true)}
-        className="fixed bottom-6 right-6 z-[9999] w-12 h-12 bg-gradient-to-br from-emerald-500/30 to-cyan-500/30 backdrop-blur-xl border border-emerald-400/40 rounded-full text-emerald-300 shadow-2xl hover:shadow-emerald-500/25 hover:shadow-3xl transition-all duration-500 group ring-1 ring-emerald-400/30 hover:ring-emerald-300/50 hover:scale-110 flex items-center justify-center overflow-hidden animate-pulse hover:animate-none"
-        title="View Market Data"
-      >
-        {/* Animated background glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-cyan-400/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
-        
-        {/* Pulsing ring animation */}
-        <div className="absolute inset-0 rounded-full border-2 border-emerald-400/30 animate-ping"></div>
-        
-        {/* Icon with bounce animation */}
-        <BarChart3 className="w-5 h-5 group-hover:text-white transition-all duration-500 group-hover:animate-bounce relative z-10" />
-        
-        {/* Subtle floating animation */}
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-emerald-400/10 to-cyan-400/10 animate-pulse"></div>
-      </button>
+      {/* Floating Action Buttons */}
+      <div className="fixed bottom-6 right-6 z-[9999] flex flex-col space-y-3">
+        {/* Positions Button */}
+        <button
+          onClick={() => {
+            setIsPositionsDialogOpen(true);
+            setIsMarketDialogOpen(false); // Close market dialog if open
+          }}
+          className="w-12 h-12 bg-gradient-to-br from-blue-500/30 to-purple-500/30 backdrop-blur-xl border border-blue-400/40 rounded-full text-blue-300 shadow-2xl hover:shadow-blue-500/25 hover:shadow-3xl transition-all duration-500 group ring-1 ring-blue-400/30 hover:ring-blue-300/50 hover:scale-110 flex items-center justify-center overflow-hidden animate-pulse hover:animate-none"
+          title="View Positions"
+        >
+          {/* Animated background glow */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
+          
+          {/* Pulsing ring animation */}
+          <div className="absolute inset-0 rounded-full border-2 border-blue-400/30 animate-ping"></div>
+          
+          {/* Icon with bounce animation */}
+          <TrendingUp className="w-5 h-5 group-hover:text-white transition-all duration-500 group-hover:animate-bounce relative z-10" />
+          
+          {/* Subtle floating animation */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/10 to-purple-400/10 animate-pulse"></div>
+        </button>
+
+        {/* Market Data Button */}
+        <button
+          onClick={() => {
+            setIsMarketDialogOpen(true);
+            setIsPositionsDialogOpen(false); // Close positions dialog if open
+          }}
+          className="w-12 h-12 bg-gradient-to-br from-emerald-500/30 to-cyan-500/30 backdrop-blur-xl border border-emerald-400/40 rounded-full text-emerald-300 shadow-2xl hover:shadow-emerald-500/25 hover:shadow-3xl transition-all duration-500 group ring-1 ring-emerald-400/30 hover:ring-emerald-300/50 hover:scale-110 flex items-center justify-center overflow-hidden animate-pulse hover:animate-none"
+          title="View Market Data"
+        >
+          {/* Animated background glow */}
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-cyan-400/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 animate-ping"></div>
+          
+          {/* Pulsing ring animation */}
+          <div className="absolute inset-0 rounded-full border-2 border-emerald-400/30 animate-ping"></div>
+          
+          {/* Icon with bounce animation */}
+          <BarChart3 className="w-5 h-5 group-hover:text-white transition-all duration-500 group-hover:animate-bounce relative z-10" />
+          
+          {/* Subtle floating animation */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-emerald-400/10 to-cyan-400/10 animate-pulse"></div>
+        </button>
+      </div>
 
       {/* Market Data Dialog */}
       <MarketDataDialog
@@ -535,6 +565,12 @@ export const PerpPortPage: React.FC = () => {
         reyaError={reyaError}
         reyaLastUpdated={reyaLastUpdated}
         onRefreshReya={refreshReyaData}
+      />
+
+      {/* Positions Display Dialog */}
+      <PositionsDisplay
+        isOpen={isPositionsDialogOpen}
+        onClose={() => setIsPositionsDialogOpen(false)}
       />
 
       {/* Success Dialog */}

@@ -380,11 +380,53 @@ export class HyperliquidPositionService {
   }
 
   /**
-   * Placeholder for getUserPositions - to be implemented when SDK endpoint known
+   * Get user's current positions from Hyperliquid
    */
   async getUserPositions(): Promise<any[]> {
-    // SDK may provide userState or positions endpoint - implement when available
-    return [];
+    try {
+      const { infoClient } = await this.initializeClients();
+      const userAddress = await this.signer.getAddress();
+      
+      console.log('Fetching user positions for address:', userAddress);
+      
+      // Get user's clearinghouse state which contains positions
+      const userState = await infoClient.clearinghouseState({ user: userAddress });
+      console.log('User state for positions:', JSON.stringify(userState, null, 2));
+      
+      // Extract positions from user state
+      const positions: any[] = [];
+      
+      if (userState && (userState as any).assetPositions) {
+        const assetPositions = (userState as any).assetPositions;
+        
+        for (const position of assetPositions) {
+          if (position && parseFloat(position.position?.coin || '0') !== 0) {
+            // Only include positions with non-zero size
+            positions.push({
+              coin: position.position?.coin || 'Unknown',
+              entryPx: parseFloat(position.position?.entryPx || '0'),
+              leverage: parseFloat(position.position?.leverage?.value || '1'),
+              liquidationPx: parseFloat(position.position?.liquidationPx || '0'),
+              marginUsed: parseFloat(position.position?.marginUsed || '0'),
+              maxLeverage: parseFloat(position.position?.maxLeverage || '1'),
+              positionValue: parseFloat(position.position?.positionValue || '0'),
+              returnOnEquity: parseFloat(position.position?.returnOnEquity || '0'),
+              szi: parseFloat(position.position?.szi || '0'),
+              unrealizedPnl: parseFloat(position.position?.unrealizedPnl || '0'),
+              isLong: parseFloat(position.position?.szi || '0') > 0,
+              dex: 'hyperliquid' // Since we're using Hyperliquid API, all positions are on Hyperliquid
+            });
+          }
+        }
+      }
+      
+      console.log(`Found ${positions.length} positions:`, positions);
+      return positions;
+      
+    } catch (error) {
+      console.error('Error fetching user positions:', error);
+      return [];
+    }
   }
 
   /**
