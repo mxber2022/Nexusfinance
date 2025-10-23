@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, AlertCircle, CheckCircle } from 'lucide-react';
+import { Slider } from './ui/Slider';
+import { useHyperliquidPosition } from '../hooks/useHyperliquidPosition';
 import type { PositionParams, PositionResult } from '../services/hyperliquidPosition'; // adjust path
 
 export interface PositionDialogProps {
@@ -27,11 +29,16 @@ export const PositionDialog: React.FC<PositionDialogProps> = ({
   error,
   onClearError,
 }) => {
-  const [leverage, setLeverage] = useState<string>('10');
+  const [leverage, setLeverage] = useState<number>(10);
   const [size, setSize] = useState<string>('100');
   const [price, setPrice] = useState<string>(currentPrice || '0');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
+  const [availableBalance, setAvailableBalance] = useState<string>('0');
+  const [isLoadingBalance, setIsLoadingBalance] = useState(false);
+
+  // Get Hyperliquid position hook
+  const { getUserBalance } = useHyperliquidPosition(true); // Using testnet
 
   // keep price synced to currentPrice when not editing
   useEffect(() => {
@@ -49,9 +56,38 @@ export const PositionDialog: React.FC<PositionDialogProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
+  // Fetch user's Hyperliquid balance when dialog opens
+  useEffect(() => {
+    const fetchUserBalance = async () => {
+      if (!isOpen) return;
+      
+      setIsLoadingBalance(true);
+      try {
+        const result = await getUserBalance();
+        if (result.success && result.balance !== undefined) {
+          const balanceStr = result.balance.toFixed(2);
+          setAvailableBalance(balanceStr);
+          setSize(balanceStr); // Set as default position size
+        } else {
+          console.log('Could not fetch user balance:', result.error);
+          setAvailableBalance('0');
+          setSize('100'); // Fallback to default
+        }
+      } catch (error) {
+        console.error('Error fetching balance:', error);
+        setAvailableBalance('0');
+        setSize('100'); // Fallback to default
+      } finally {
+        setIsLoadingBalance(false);
+      }
+    };
+
+    fetchUserBalance();
+  }, [isOpen, getUserBalance]);
+
   const calculateNotionalValue = () => {
     const sizeNum = parseFloat(size) || 0;
-    const levNum = parseFloat(leverage) || 1;
+    const levNum = leverage || 1;
     return (sizeNum * levNum).toFixed(2);
   };
 
@@ -71,7 +107,7 @@ export const PositionDialog: React.FC<PositionDialogProps> = ({
         assetIndex: 0, // adapt if UI supplies index
         isLong: positionType === 'long',
         size: size,
-        leverage: parseFloat(leverage),
+        leverage: leverage,
         isTestnet: true,
       };
 
@@ -82,7 +118,7 @@ export const PositionDialog: React.FC<PositionDialogProps> = ({
         // reset small form values but keep price sync on next open
         setTimeout(() => {
           setSize('100');
-          setLeverage('10');
+          setLeverage(10);
           setPrice(currentPrice || '0');
         }, 1200);
       } else {
@@ -128,23 +164,38 @@ export const PositionDialog: React.FC<PositionDialogProps> = ({
         {/* Inputs */}
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Leverage</label>
-            <div className="relative">
-              <input
-                type="number"
-                value={leverage}
-                onChange={(e) => setLeverage(e.target.value)}
-                placeholder="10"
-                min="1"
-                max="100"
-                className="w-full px-4 py-3 bg-black/30 backdrop-blur-xl border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-white/40 focus:outline-none transition-all duration-300 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
-              />
-              <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm">x</div>
-            </div>
+            <Slider
+              value={leverage}
+              onChange={setLeverage}
+              min={1}
+              max={40}
+              step={1}
+              label="Leverage"
+              formatValue={(value) => `${value}x`}
+              className="mb-4"
+            />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Position Size (USDC)</label>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm font-medium text-gray-300">Position Size (USDC)</label>
+              <div className="flex items-center space-x-2">
+                {isLoadingBalance ? (
+                  <span className="text-xs text-gray-500">Loading balance...</span>
+                ) : (
+                  <span className="text-xs text-gray-400">
+                    Available: {availableBalance} USDC
+                  </span>
+                )}
+                <button
+                  onClick={() => setSize(availableBalance)}
+                  disabled={isLoadingBalance || parseFloat(availableBalance) <= 0}
+                  className="px-2 py-1 text-xs bg-blue-500/20 border border-blue-500/30 text-blue-400 rounded hover:bg-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                >
+                  Max
+                </button>
+              </div>
+            </div>
             <input
               type="number"
               value={size}

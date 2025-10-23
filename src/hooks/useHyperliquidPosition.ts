@@ -13,6 +13,9 @@ export interface UseHyperliquidPositionReturn {
   getMarketMetadata: () => Promise<MarketMetadata[]>;
   getAssetPrice: (assetIndex: number) => Promise<string>;
   
+  // User balance
+  getUserBalance: () => Promise<{ success: boolean; balance?: number; error?: string }>;
+  
   // Network operations
   checkNetwork: () => Promise<boolean>;
   switchNetwork: () => Promise<boolean>;
@@ -253,12 +256,37 @@ export const useHyperliquidPosition = (isTestnet: boolean = true): UseHyperliqui
     }
   }, [walletClient, isTestnet]);
 
+  const getUserBalance = useCallback(async (): Promise<{ success: boolean; balance?: number; error?: string }> => {
+    if (!walletClient || !address) {
+      return {
+        success: false,
+        error: 'Wallet not connected'
+      };
+    }
+
+    try {
+      const provider = new ethers.BrowserProvider(walletClient);
+      const signer = await provider.getSigner();
+      const positionService = new HyperliquidPositionService(provider, signer, isTestnet);
+      
+      return await positionService.getUserBalance();
+    } catch (error) {
+      console.error('Error fetching user balance:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      return {
+        success: false,
+        error: errorMessage
+      };
+    }
+  }, [walletClient, address, isTestnet]);
+
   return {
     openPosition,
     closePosition,
     getUserPositions,
     getMarketMetadata,
     getAssetPrice,
+    getUserBalance,
     checkNetwork,
     switchNetwork,
     isOpeningPosition,

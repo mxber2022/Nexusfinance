@@ -421,4 +421,36 @@ export class HyperliquidPositionService {
       return false;
     }
   }
+
+  /**
+   * Get user's available USDC balance from Hyperliquid
+   */
+  async getUserBalance(): Promise<{ success: boolean; balance?: number; error?: string }> {
+    try {
+      const { infoClient } = await this.initializeClients();
+      const userAddress = await this.signer.getAddress();
+      
+      console.log('Fetching user balance for address:', userAddress);
+      const userState = await infoClient.clearinghouseState({ user: userAddress });
+      console.log('User state:', JSON.stringify(userState));
+      
+      // Extract USDC balance from user state
+      let usdcBalance = 0;
+      if ((userState as any).withdrawable) {
+        usdcBalance = parseFloat((userState as any).withdrawable);
+        console.log('Found balance in withdrawable:', usdcBalance);
+      } else if (userState.marginSummary && (userState.marginSummary as any).withdrawable) {
+        usdcBalance = parseFloat((userState.marginSummary as any).withdrawable);
+        console.log('Found balance in marginSummary.withdrawable:', usdcBalance);
+      } else {
+        console.log('Could not find balance in user state');
+        return { success: false, error: 'Could not find user balance' };
+      }
+      
+      return { success: true, balance: usdcBalance };
+    } catch (error) {
+      console.error('Error fetching user balance:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  }
 }
