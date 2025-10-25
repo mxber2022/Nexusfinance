@@ -24,9 +24,9 @@ export function FlowFiPage({ onNavigateBack }: FlowFiPageProps) {
       try {
         // Mock balances - replace with actual balance fetching logic
         setBalances({
-          USDC: '1,250.50',
-          USDT: '850.25',
-          ETH: '2.45'
+          USDC: '10.50',
+          USDT: '8.25',
+          ETH: '0.012'
         });
       } catch (error) {
         console.error('Error fetching balances:', error);
@@ -44,10 +44,10 @@ export function FlowFiPage({ onNavigateBack }: FlowFiPageProps) {
   ];
 
   const yieldPlatforms = [
-    { name: 'Aave', apy: '8.2%', chain: 'Ethereum', tvl: '$12.5B', logo: '/aave.jpg' },
-    { name: 'Morpho', apy: '7.8%', chain: 'Arbitrum', tvl: '$2.1B', logo: '/morpho.jpg' },
-    { name: 'Compound', apy: '9.1%', chain: 'Polygon', tvl: '$3.2B', logo: 'https://compound.finance/compound-components/assets/compound-mark.svg' },
-    { name: 'Euler', apy: '9.3%', chain: 'Ethereum', tvl: '$850M', logo: '/euler.jpg' }
+    { name: 'Aave', apy: '3.06%', chain: 'Ethereum', tvl: '', logo: '/aave.jpg' },
+    { name: 'Morpho', apy: '7.97%', chain: 'Arbitrum', tvl: '', logo: '/morpho.jpg' },
+    { name: 'Compound', apy: '3.40%', chain: 'Polygon', tvl: '', logo: 'https://compound.finance/compound-components/assets/compound-mark.svg' },
+    { name: 'Euler', apy: '5.06%', chain: 'Ethereum', tvl: '', logo: '/euler.jpg' }
   ];
 
   const [optimizationResult, setOptimizationResult] = useState(null);
@@ -259,7 +259,7 @@ export function FlowFiPage({ onNavigateBack }: FlowFiPageProps) {
                         </div>
                         <div className="text-right">
                           <div className="text-white font-bold text-sm">{platform.apy}</div>
-                          <div className="text-xs text-gray-400">TVL: {platform.tvl}</div>
+                          {/* <div className="text-xs text-gray-400">TVL: {platform.tvl}</div> */}
                         </div>
                       </div>
                     </button>
