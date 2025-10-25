@@ -94,8 +94,9 @@ export class AaveService {
           }),
           tokenApproval: {
             token: tokenSymbol as any,
-            amount: parseFloat(amount)
-          },
+            amount: parseFloat(amount),
+            waitForConfirmation: true
+          }
         },
         waitForReceipt: true,
         requiredConfirmations: 3,
