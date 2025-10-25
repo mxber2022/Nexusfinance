@@ -2,40 +2,76 @@ import React, { useState, useEffect } from 'react';
 import { TrendingUp, ArrowRight, Zap, Shield, DollarSign, Clock, Target, Wallet } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
+import { useNexus } from '@avail-project/nexus-widgets';
+import { useAccount } from 'wagmi';
+import { useAppKitAccount } from '@reown/appkit/react';
 
 interface FlowFiPageProps {
   onNavigateBack?: () => void;
 }
 
 export function FlowFiPage({ onNavigateBack }: FlowFiPageProps) {
+  const { sdk, isSdkInitialized } = useNexus();
+  const { address } = useAccount();
+  const { address: appKitAddress } = useAppKitAccount();
+  
+  const connectedAddress = appKitAddress || address;
+  
   const [selectedStable, setSelectedStable] = useState('USDC');
   const [selectedProtocol, setSelectedProtocol] = useState('');
   const [amount, setAmount] = useState('');
   const [isOptimizing, setIsOptimizing] = useState(false);
   const [balances, setBalances] = useState({
-    USDC: '1,250.50',
-    USDT: '850.25',
-    ETH: '2.45'
+    USDC: '0',
+    USDT: '0',
+    ETH: '0'
   });
+  const [isLoadingBalances, setIsLoadingBalances] = useState(false);
 
-  // Fetch token balances
+  // Fetch unified balances from Nexus SDK
   useEffect(() => {
-    const fetchBalances = async () => {
+    const fetchUnifiedBalances = async () => {
+      if (!sdk || !isSdkInitialized || !connectedAddress) {
+        return;
+      }
+
+      setIsLoadingBalances(true);
+      
       try {
-        // Mock balances - replace with actual balance fetching logic
-        setBalances({
-          USDC: '10.50',
-          USDT: '8.25',
-          ETH: '0.012'
+        // Get all unified balances from Nexus
+        const allBalances = await sdk.getUnifiedBalances();
+        
+        // Convert to our format - aggregate balances across all chains
+        const aggregatedBalances: Record<string, number> = {};
+        
+        allBalances.forEach((asset) => {
+          const { symbol, balance } = asset;
+          
+          // Aggregate balance across all chains for each token
+          if (!aggregatedBalances[symbol]) {
+            aggregatedBalances[symbol] = 0;
+          }
+          aggregatedBalances[symbol] += parseFloat(balance);
         });
+
+        // Update balances state
+        setBalances({
+          USDC: aggregatedBalances.USDC?.toFixed(2) || '0',
+          USDT: aggregatedBalances.USDT?.toFixed(2) || '0',
+          ETH: aggregatedBalances.ETH?.toFixed(4) || '0'
+        });
+        
+        console.log('Unified balances fetched:', aggregatedBalances);
       } catch (error) {
-        console.error('Error fetching balances:', error);
+        console.error('Error fetching unified balances:', error);
         setBalances({ USDC: '0', USDT: '0', ETH: '0' });
+      } finally {
+        setIsLoadingBalances(false);
       }
     };
 
-    fetchBalances();
-  }, []);
+    fetchUnifiedBalances();
+  }, [sdk, isSdkInitialized, connectedAddress]);
 
   const stablecoins = [
     { symbol: 'USDC', name: 'USD', platform: 'Aave', logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/3408.png' },
@@ -183,13 +219,19 @@ export function FlowFiPage({ onNavigateBack }: FlowFiPageProps) {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           <Wallet className="w-4 h-4 text-blue-400/30" />
-                          <div className="text-sm text-gray-700">Balances:</div>
+                          <div className="text-sm text-gray-700">
+                            {isLoadingBalances ? 'Loading balances...' : 'Unified Balances:'}
+                          </div>
                         </div>
-                        <div className="flex justify-between w-full max-w-xs text-sm">
-                          <div className="text-gray-500">{balances.USDC} USDC</div>
-                          <div className="text-gray-500">{balances.USDT} USDT</div>
-                          <div className="text-gray-500">{balances.ETH} ETH</div>
-                        </div>
+                        {isLoadingBalances ? (
+                          <div className="text-sm text-gray-500">Fetching from Nexus...</div>
+                        ) : (
+                          <div className="flex justify-between w-full max-w-xs text-sm">
+                            <div className="text-gray-500">{balances.USDC} USDC</div>
+                            <div className="text-gray-500">{balances.USDT} USDT</div>
+                            <div className="text-gray-500">{balances.ETH} ETH</div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
