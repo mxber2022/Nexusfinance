@@ -1,6 +1,22 @@
 # NexusFinance
 
-**The Universal Perpetual Aggregator** - Trade any perpetual, anywhere, with one click. A revolutionary cross-chain DeFi platform powered by Avail Nexus SDK, enabling seamless perpetual trading, gas refueling, and unified USDC/USDT deposits to the highest yield generating markets.
+**KING OF PERPS** - The Universal Perpetual Aggregator. Trade any perpetual, anywhere, with one click. A revolutionary cross-chain DeFi platform powered by Avail Nexus SDK, enabling seamless perpetual trading, gas refueling, and unified USDC/USDT deposits to the highest yield generating markets.
+
+## 🚨 The Problem We Solve
+
+### Blockchain Fragmentation in Derivatives Markets
+Traders face significant barriers when trying to access the best perpetual trading opportunities across different blockchains and DEXs:
+
+- **Capital Inefficiency**: Assets scattered across chains, manual bridging required
+- **Operational Complexity**: Multiple wallet connections, chain switching friction  
+- **Market Inefficiency**: Missed arbitrage opportunities, fragmented access
+
+### Our Solution
+NexusFinance provides a unified platform that eliminates these barriers:
+
+- **Unified Access**: One-click deposits to any DEX from any chain
+- **Optimized Routing**: Automated gas optimization, minimal costs
+- **Real-Time Intelligence**: Live funding rate comparison across DEXs
 
 ## 🚀 What We've Built
 
@@ -18,6 +34,13 @@
 - **Unified Balance Display**: See your total balance across all chains
 - **Lightning-Fast Settlement**: Powered by Avail Nexus SDK for cross-chain execution
 - **Smart Routing**: Automatically finds the most efficient path for your transactions
+
+### 💰 FlowFi - Auto Yield Optimization
+- **Unified Balance Integration**: Real-time balance fetching from Nexus SDK across all chains
+- **Multi-Protocol Support**: Aave, Morpho, Compound, Euler integration
+- **Auto Rebalancing**: AI-powered yield optimization every 7 days
+- **Cross-Chain Yield Farming**: Automatically move assets to highest-yielding protocols
+- **Smart Execution**: Bridge and deposit to optimal protocols in single transaction
 
 ### 🔧 Advanced Features
 - **Nexus SDK Integration**: Seamless cross-chain bridging with `bridgeAndExecute`
@@ -75,7 +98,9 @@ src/
 │   ├── layout/          # Header, Footer
 │   ├── sections/        # Page sections (HeroSection)
 │   ├── ui/              # UI components (Button, Card, etc.)
-│   ├── PositionDialog.tsx # Position opening dialog
+│   ├── PositionDialog.tsx # Position opening dialog with leverage slider
+│   ├── PositionsDisplay.tsx # User positions display with DEX info
+│   ├── MarketDataDialog.tsx # Market data display
 │   └── OpenPositionButton.tsx # Position opening button
 ├── constants/           # Chain and token configurations
 │   ├── chains.ts        # Supported blockchain networks
@@ -84,14 +109,17 @@ src/
 │   └── marketData.ts    # Market data constants
 ├── hooks/               # Custom React hooks
 │   ├── useHyperliquid.ts # Hyperliquid integration
+│   ├── useHyperliquidData.ts # Hyperliquid market data
+│   ├── useHyperliquidPosition.ts # Position management and balance fetching
 │   ├── useAster.ts      # Aster integration
+│   ├── useAsterData.ts  # Aster market data
 │   ├── useReyaData.ts   # Reya market data
-│   └── useTokenBalances.ts # Token balance management
+│   └── useTokenBalances.ts # Unified token balance management
 ├── pages/               # Main application pages
-│   ├── HomePage.tsx     # Landing page
+│   ├── HomePage.tsx     # Landing page with problem/solution section
 │   ├── GasRefuelPage.tsx # Gas refueling interface
-│   ├── FlowFiPage.tsx   # Yield optimization (placeholder)
-│   └── PerpPortPage.tsx # Perpetual trading interface
+│   ├── FlowFiPage.tsx   # Auto yield optimization with Nexus balance integration
+│   └── PerpPortPage.tsx # Perpetual trading interface with position management
 ├── providers/           # React context providers
 │   └── AppKitProvider.tsx # Wallet connection provider
 ├── services/            # External service integrations
@@ -142,6 +170,14 @@ src/
 4. **Enter refuel amount** - Specify how much gas you need
 5. **Click "Refuel"** - Execute cross-chain transaction to refuel your destination chain
 
+### Auto Yield Optimization (FlowFi)
+1. **Connect your wallet** to access unified balances across all chains
+2. **Select your asset** - Choose from USDC, USDT, or ETH
+3. **Choose target protocol** - Select from Aave, Morpho, Compound, or Euler
+4. **Enter amount** - Specify how much to optimize
+5. **Enable auto-rebalancing** - Set up automatic yield optimization every 7 days
+6. **Click "Move Now"** - Execute cross-chain bridge and deposit to optimal protocol
+
 ### Key Features
 - **Unified Balance Display**: See your total balance across all chains
 - **One-Click Operations**: Bridge and deposit in a single transaction
@@ -185,11 +221,15 @@ src/
 
 ### Key Features Implemented
 - **Nexus SDK Integration**: `bridgeAndExecute` for seamless cross-chain operations
-- **Position Management**: Open long/short positions with leverage on Hyperliquid
+- **Position Management**: Open long/short positions with leverage on Hyperliquid (up to 40x)
 - **Unified Deposits**: Deposit unified USDC/USDT to highest yield markets
 - **Market Data**: Real-time funding rates, liquidity, and volume data
 - **Unified UI**: Single interface for all perpetual DEXes
 - **Cross-Chain Balances**: Aggregate balances across all supported chains
+- **Position Display**: View all positions with DEX info and asset icons
+- **PnL Tracking**: Real-time PnL indicators with floating values
+- **Auto Yield Optimization**: AI-powered yield farming across protocols
+- **Problem/Solution Section**: Clear explanation of blockchain fragmentation issues
 
 ### Architecture
 - **Frontend**: React 18 + TypeScript + Vite
