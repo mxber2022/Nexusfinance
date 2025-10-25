@@ -5,6 +5,7 @@ import { Card } from '../components/ui/Card';
 import { useNexus } from '@avail-project/nexus-widgets';
 import { useAccount } from 'wagmi';
 import { useAppKitAccount } from '@reown/appkit/react';
+import { useAave } from '../hooks/useAave';
 
 interface FlowFiPageProps {
   onNavigateBack?: () => void;
@@ -14,6 +15,7 @@ export function FlowFiPage({ onNavigateBack }: FlowFiPageProps) {
   const { sdk, isSdkInitialized } = useNexus();
   const { address } = useAccount();
   const { address: appKitAddress } = useAppKitAccount();
+  const { supplyToAave, getEstimatedAPY, checkBalance, isLoading: aaveLoading, error: aaveError } = useAave();
   
   const connectedAddress = appKitAddress || address;
   
@@ -91,20 +93,62 @@ export function FlowFiPage({ onNavigateBack }: FlowFiPageProps) {
   const [autoRebalance, setAutoRebalance] = useState(true);
 
   const handleOptimize = async () => {
+    if (!sdk || !isSdkInitialized || !connectedAddress) {
+      console.error('SDK not initialized or user not connected');
+      return;
+    }
+
+    if (!amount || !selectedProtocol || !selectedStable) {
+      console.error('Missing required parameters');
+      return;
+    }
+
     setIsOptimizing(true);
-    // Simulate optimization process
-    setTimeout(() => {
-      setIsOptimizing(false);
-      setShowSuccess(true);
-      setOptimizationResult({
-        from: selectedStable,
-        to: selectedProtocol,
-        amount: amount,
-        estimatedYield: '9.1%'
+    setShowSuccess(false);
+
+    try {
+      console.log('Starting Aave optimization:', {
+        token: selectedStable,
+        amount,
+        protocol: selectedProtocol,
+        userAddress: connectedAddress
       });
-      // Hide success message after 5 seconds
-      setTimeout(() => setShowSuccess(false), 5000);
-    }, 3000);
+
+      // Check balance first
+      const hasBalance = await checkBalance(selectedStable, amount, connectedAddress);
+      if (!hasBalance) {
+        throw new Error(`Insufficient ${selectedStable} balance`);
+      }
+
+      // Get estimated APY
+      const estimatedAPY = await getEstimatedAPY(selectedStable);
+
+      // Execute the supply to Aave
+      const result = await supplyToAave(sdk, selectedStable, amount, connectedAddress);
+
+      if (result.success) {
+        setShowSuccess(true);
+        setOptimizationResult({
+          from: selectedStable,
+          to: selectedProtocol,
+          amount: amount,
+          estimatedYield: estimatedAPY,
+          txHash: result.txHash
+        });
+        
+        console.log('Aave optimization successful:', result);
+        
+        // Hide success message after 8 seconds
+        setTimeout(() => setShowSuccess(false), 8000);
+      } else {
+        throw new Error(result.error || 'Optimization failed');
+      }
+    } catch (error) {
+      console.error('Optimization error:', error);
+      // You could add error state handling here
+    } finally {
+      setIsOptimizing(false);
+    }
   };
 
   return (
@@ -201,7 +245,8 @@ export function FlowFiPage({ onNavigateBack }: FlowFiPageProps) {
                           placeholder="Enter amount"
                           min="0"
                           step="0.0001"
-                          className="w-full px-4 py-3 bg-black/20 backdrop-blur-xl border border-white/15 rounded-xl text-white placeholder-gray-400 focus:border-white/30 focus:ring-1 focus:ring-white/20 transition-all duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          className="w-full px-4 py-3 bg-black/20 backdrop-blur-xl border border-white/15 rounded-xl text-white placeholder-gray-400 focus:border-white/30 focus:outline-none focus:ring-0 transition-all duration-300 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          style={{ outline: 'none', boxShadow: 'none' }}
                         />
                         <div className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm">
                           {selectedStable}
@@ -325,18 +370,18 @@ export function FlowFiPage({ onNavigateBack }: FlowFiPageProps) {
             <div className="flex justify-center mt-12">
               <button
                 onClick={handleOptimize}
-                disabled={!amount || isOptimizing || !selectedProtocol}
+                disabled={!amount || isOptimizing || aaveLoading || !selectedProtocol || !sdk || !isSdkInitialized}
                 className="px-10 py-4 bg-gradient-to-r from-blue-500/20 to-purple-500/20 backdrop-blur-2xl border border-white/30 text-white hover:from-blue-500/30 hover:to-purple-500/30 hover:border-white/50 hover:text-white font-semibold text-base rounded-2xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-xl hover:shadow-2xl disabled:hover:scale-100"
               >
-                {isOptimizing ? (
+                {isOptimizing || aaveLoading ? (
                   <div className="flex items-center justify-center">
                     <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin mr-3"></div>
-                    Optimizing...
+                    {aaveLoading ? 'Supplying to Aave...' : 'Optimizing...'}
                   </div>
                 ) : (
                   <div className="flex items-center justify-center">
                     <Zap className="h-6 w-6 mr-2" />
-                    Move Now
+                    Supply to Aave
                   </div>
                 )}
               </button>
@@ -352,8 +397,32 @@ export function FlowFiPage({ onNavigateBack }: FlowFiPageProps) {
                   <div>
                     <div className="text-green-300 font-semibold text-sm">Optimization Complete!</div>
                     <div className="text-green-400 text-xs">
-                      Moved {optimizationResult.amount} {optimizationResult.from} to {optimizationResult.to} 
-                      for {optimizationResult.estimatedYield} APY
+                      Supplied {optimizationResult.amount} {optimizationResult.from} to Aave V3
+                    </div>
+                    <div className="text-green-400 text-xs">
+                      Estimated APY: {optimizationResult.estimatedYield}
+                    </div>
+                    {optimizationResult.txHash && (
+                      <div className="text-green-400 text-xs mt-1">
+                        TX: {optimizationResult.txHash.slice(0, 10)}...
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Error Notification */}
+            {aaveError && (
+              <div className="fixed top-4 right-4 z-50 bg-red-500/10 backdrop-blur-xl border border-red-500/30 rounded-xl p-4 shadow-2xl animate-slideInRight">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-red-500/20 rounded-full flex items-center justify-center">
+                    <Zap className="h-4 w-4 text-red-400" />
+                  </div>
+                  <div>
+                    <div className="text-red-300 font-semibold text-sm">Optimization Failed</div>
+                    <div className="text-red-400 text-xs">
+                      {aaveError}
                     </div>
                   </div>
                 </div>
