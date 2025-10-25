@@ -1,5 +1,5 @@
 import { BridgeAndExecuteParams, BridgeAndExecuteResult } from '@avail-project/nexus-widgets';
-import { Abi, PublicClient, parseUnits } from 'viem';
+import { Abi, WalletClient, parseUnits } from 'viem';
 
 // Aave V3 Pool Contract Configuration
 export const AAVE_V3_CONFIG = {
@@ -27,10 +27,10 @@ export const AAVE_POOL_ABI: Abi = [
 ] as const;
 
 export class AaveService {
-  private publicClient: PublicClient;
+  private walletClient: WalletClient;
 
-  constructor(publicClient: PublicClient) {
-    this.publicClient = publicClient;
+  constructor(walletClient: WalletClient) {
+    this.walletClient = walletClient;
   }
 
   /**

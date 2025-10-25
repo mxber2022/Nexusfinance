@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { usePublicClient } from 'wagmi';
+import { useWalletClient } from 'wagmi';
 import { AaveService } from '../services/aave';
 
 export interface UseAaveReturn {
@@ -11,11 +11,11 @@ export interface UseAaveReturn {
 }
 
 export function useAave(): UseAaveReturn {
-  const publicClient = usePublicClient();
+  const { data: walletClient } = useWalletClient();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const aaveService = new AaveService(publicClient);
+  const aaveService = walletClient ? new AaveService(walletClient) : null;
 
   const supplyToAave = useCallback(async (
     sdk: any,
@@ -23,6 +23,13 @@ export function useAave(): UseAaveReturn {
     amount: string,
     userAddress: string
   ) => {
+    if (!aaveService) {
+      return {
+        success: false,
+        error: 'Public client not available'
+      };
+    }
+
     setIsLoading(true);
     setError(null);
 
@@ -42,6 +49,8 @@ export function useAave(): UseAaveReturn {
   }, [aaveService]);
 
   const getEstimatedAPY = useCallback(async (tokenSymbol: string) => {
+    if (!aaveService) return '2.50%';
+    
     try {
       return await aaveService.getEstimatedAPY(tokenSymbol);
     } catch (err) {
@@ -55,6 +64,8 @@ export function useAave(): UseAaveReturn {
     amount: string,
     userAddress: string
   ) => {
+    if (!aaveService) return false;
+    
     try {
       return await aaveService.checkBalance(tokenSymbol, amount, userAddress);
     } catch (err) {
