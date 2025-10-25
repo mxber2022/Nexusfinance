@@ -86,7 +86,7 @@ export function FlowFiPage({ onNavigateBack }: FlowFiPageProps) {
     { name: 'Euler', apy: '5.06%', chain: 'Ethereum', tvl: '', logo: '/euler.jpg' }
   ];
 
-  const [optimizationResult, setOptimizationResult] = useState(null);
+  const [optimizationResult, setOptimizationResult] = useState<any>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [autoRebalance, setAutoRebalance] = useState(true);
 
