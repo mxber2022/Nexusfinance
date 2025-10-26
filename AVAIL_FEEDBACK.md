@@ -45,7 +45,9 @@ const usdcBalance = await sdk.getUnifiedBalance('USDC');
 
 We initially thought the docs were missing stuff, but after diving deeper into the [API Reference](https://docs.availproject.org/nexus/avail-nexus-sdk/nexus-core/api-reference), we found everything we needed. The examples are solid and the error handling docs are really helpful.
 
-### 3. **What We'd Love to See Next**
+### 3. **🚀 What We'd Love to See Next - Future Enhancements**
+
+*While the SDK is already excellent, here are some enhancements that would make it even more powerful for the DeFi ecosystem:*
 
 #### **Token Extensibility & Future Support** 🪙
 While the SDK currently supports USDC, USDT, and ETH well, we'd love to see more comprehensive token support for the future:
