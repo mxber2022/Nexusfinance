@@ -16,7 +16,7 @@ export function HeroSection() {
       size: "w-28 h-28"
     },
     {
-      src: "https://www.availproject.org/_next/static/media/grow.1113097f.png",
+      src: "/avail2.png",
       alt: "Avail",
       size: "w-20 h-20"
     }
