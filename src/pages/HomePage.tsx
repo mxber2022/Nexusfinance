@@ -132,7 +132,7 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
                     <div>
                       <h4 className="text-sm font-semibold text-white mb-1 group-hover:text-red-100 transition-colors duration-300">Operational Complexity</h4>
                       <p className="text-xs text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                        Multiple wallet connections, chain switching friction
+                        Connect to multiple DEXes separately
                       </p>
                     </div>
                   </div>
@@ -170,9 +170,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
                   <div className="flex items-start space-x-3 p-4 bg-green-500/5 border border-green-500/20 rounded-lg hover:bg-green-500/10 hover:border-green-500/30 transition-all duration-300 group animate-fadeIn" style={{animationDelay: '1.4s'}}>
                     <CheckCircle className="w-4 h-4 text-green-400 mt-1 flex-shrink-0 group-hover:scale-110 transition-transform duration-300" />
                     <div>
-                      <h4 className="text-sm font-semibold text-white mb-1 group-hover:text-green-100 transition-colors duration-300">Optimized Routing</h4>
+                      <h4 className="text-sm font-semibold text-white mb-1 group-hover:text-green-100 transition-colors duration-300">One Stop Shop</h4>
                       <p className="text-xs text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
-                        Automated gas optimization, minimal costs
+                        Gas Refuel, yield farming, perpetual trading under one roof
                       </p>
                     </div>
                   </div>
@@ -218,8 +218,8 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
           <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-br from-green-500/5 to-emerald-500/5 rounded-full blur-3xl"></div>
           <div className="relative z-10 text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-full text-gray-300 text-sm font-medium mb-6">
-              <div className="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></div>
+            <div className="inline-flex items-center px-4 py-2 bg-black/20 backdrop-blur-2xl border border-white/15 rounded-full text-gray-200 text-sm font-medium mb-6 shadow-xl">
+              <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
               How PerpPort Works
             </div>
                 <h2 className="text-2xl font-bold text-gray-100 mb-6">
@@ -276,13 +276,27 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
           </div>
 
           <div className="relative z-10 text-center">
-            <Button onClick={onGetStarted} size="md" variant="outline" className="px-12 py-3 bg-black/20 backdrop-blur-2xl border border-white/15 text-gray-200 hover:bg-black/30 hover:text-white hover:border-white/25 hover:scale-105 transition-all duration-500 shadow-2xl hover:shadow-3xl group ring-1 ring-white/5 hover:ring-white/10">
+            {/* <Button onClick={onGetStarted} size="md" variant="outline" className="px-12 py-3 bg-black/20 backdrop-blur-2xl border border-white/15 text-gray-200 hover:bg-black/30 hover:text-white hover:border-white/25 hover:scale-105 transition-all duration-500 shadow-2xl hover:shadow-3xl group ring-1 ring-white/5 hover:ring-white/10">
               <span className="flex items-center text-base font-bold tracking-wide">
                 Get Started
                 <ArrowRight className="h-5 w-5 ml-3 group-hover:translate-x-1 transition-transform duration-500" />
               </span>
-            </Button>
+            </Button> */}
           </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button 
+                onClick={onNavigateToPerpPort}
+                className="px-6 py-3 bg-black/60 backdrop-blur-2xl border border-white/15 text-white hover:bg-black/80 hover:border-white/25 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl rounded-2xl"
+              >
+                <span className="flex items-center">
+                  <Zap className="h-4 w-4 mr-2" />
+                  Launch PerpPort
+                  {/* <ArrowRight className="h-4 w-4 ml-2" /> */}
+                </span>
+              </button>
+            </div>
+
         </div>
       </section>
 
@@ -294,10 +308,10 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
           <div className="absolute top-0 left-0 w-80 h-80 bg-gradient-to-br from-purple-500/5 to-pink-500/5 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 rounded-full blur-3xl"></div>
           <div className="relative z-10 text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-gray-800/60 backdrop-blur-xl border border-gray-700/50 rounded-full text-gray-300 text-sm font-medium mb-6">
-              <div className="w-2 h-2 bg-purple-500 rounded-full mr-2 animate-pulse"></div>
-              Key Features
-            </div>
+           <div className="inline-flex items-center px-4 py-2 bg-black/20 backdrop-blur-2xl border border-white/15 rounded-full text-gray-200 text-sm font-medium mb-6 shadow-xl">
+           <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
+                Key Features
+              </div>
             <h2 className="text-2xl font-bold text-gray-100 mb-6">
               {/* Why Choose NexusFinance? */}
             </h2>
@@ -331,12 +345,12 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(255,255,255,0.02)_0%,transparent_50%)]"></div>
           
           <div className="relative z-10 text-center mb-16">
-            <div className="inline-flex items-center px-3 py-1.5 bg-black/20 backdrop-blur-2xl border border-white/15 rounded-full text-gray-200 text-xs font-medium mb-4 shadow-xl">
-              {/* <TrendingUp className="h-3 w-3 mr-1.5 text-green-400" /> */}
-              <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
-              
-               Yield Optimization
-            </div>
+           
+           <div className="inline-flex items-center px-4 py-2 bg-black/20 backdrop-blur-2xl border border-white/15 rounded-full text-gray-200 text-sm font-medium mb-6 shadow-xl">
+           <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
+                Flowfi Yield
+              </div>
+
             <h2 className="text-2xl font-bold text-white mb-4">
               {/* Your Stablecoins Always Chasing the Best Yield */}
             </h2>
@@ -344,29 +358,7 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
               {/* Automatically move idle stables to the best yield platforms across chains with a single click. */}
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
-                onClick={onNavigateToFlowFi}
-                className="px-6 py-3 bg-black/60 backdrop-blur-2xl border border-white/15 text-white hover:bg-black/80 hover:border-white/25 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl rounded-2xl"
-              >
-                <span className="flex items-center">
-                  {/* <TrendingUp className="h-4 w-4 mr-2" /> */}
-                    Yield Optimization 
-                  {/* <ArrowRight className="h-4 w-4 ml-2" /> */}
-                </span>
-              </button>
-              
-              <button 
-                onClick={onGetStarted}
-                className="px-6 py-3 bg-black/60 backdrop-blur-2xl border border-white/15 text-white hover:bg-black/80 hover:border-white/25 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl rounded-2xl"
-              >
-                <span className="flex items-center">
-                  <Fuel className="h-4 w-4 mr-2" />
-                  Gas Refuel
-                  {/* <ArrowRight className="h-4 w-4 ml-2" /> */}
-                </span>
-              </button>
-            </div>
+         
           </div>
 
           <div className="relative z-10 grid md:grid-cols-3 gap-8">
@@ -400,50 +392,52 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
               </p>
             </div>
           </div>
+            
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+              <button 
+                onClick={onNavigateToFlowFi}
+                className="px-6 py-3 bg-black/60 backdrop-blur-2xl border border-white/15 text-white hover:bg-black/80 hover:border-white/25 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl rounded-2xl"
+              >
+                <span className="flex items-center">
+                  {/* <TrendingUp className="h-4 w-4 mr-2" /> */}
+                    Yield Optimization 
+                  {/* <ArrowRight className="h-4 w-4 ml-2" /> */}
+                </span>
+              </button>
+              
+            </div>
         </div>
       </section>
 
-      {/* PerpPort Section */}
+      {/* Gas refuel Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="relative bg-black/20 backdrop-blur-2xl border border-white/15 rounded-3xl p-12 shadow-2xl hover:bg-black/30 hover:border-white/25 hover:shadow-3xl transition-all duration-500 overflow-hidden ring-1 ring-white/5">
           {/* Subtle background elements */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(255,255,255,0.02)_0%,transparent_50%)]"></div>
           
-          <div className="relative z-10 text-center mb-16">
-            <div className="inline-flex items-center px-3 py-1.5 bg-black/20 backdrop-blur-2xl border border-white/15 rounded-full text-gray-200 text-xs font-medium mb-4 shadow-xl">
-              {/* <Zap className="h-3 w-3 mr-1.5 text-purple-400" /> */}
+            <div className="relative z-10 text-center mb-16">
+       
+ 
+            <div className="inline-flex items-center px-4 py-2 bg-black/20 backdrop-blur-2xl border border-white/15 rounded-full text-gray-200 text-sm font-medium mb-6 shadow-xl">
               <div className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></div>
-              Cross-Chain Perpetual Deposits
+              Gas Refuel
             </div>
-            <h2 className="text-2xl font-bold text-white mb-4">
-              {/* Deposit to Your Favorite Perp DEX — From Any Chain */}
+            {/* <h2 className="text-2xl font-bold text-white mb-4">
+              Refuel Gas on Any Chain — From Any Token
             </h2>
             <p className="text-base text-gray-300 max-w-2xl mx-auto mb-6">
-              {/* One-click deposits to Hyperliquid, Aevo, Drift and more. No manual bridging or network switching required. */}
-            </p>
-          
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button 
-                onClick={onNavigateToPerpPort}
-                className="px-6 py-3 bg-black/60 backdrop-blur-2xl border border-white/15 text-white hover:bg-black/80 hover:border-white/25 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl rounded-2xl"
-              >
-                <span className="flex items-center">
-                  <Zap className="h-4 w-4 mr-2" />
-                  Launch PerpPort
-                  {/* <ArrowRight className="h-4 w-4 ml-2" /> */}
-                </span>
-              </button>
-            </div>
-        </div>
+              Use ETH, USDC, or USDT from any network to refuel gas on Ethereum, Arbitrum, BSC, or Solana. No manual bridging required.
+            </p> */}
+          </div>
 
         <div className="relative z-10 grid md:grid-cols-3 gap-8">
           <div className="text-center bg-black/20 backdrop-blur-2xl border border-white/15 rounded-2xl p-6 shadow-2xl hover:shadow-3xl hover:border-white/30 transition-all duration-500 group">
             <div className="w-16 h-16 bg-gradient-to-br from-gray-500/20 to-white/20 border border-white/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Zap className="h-8 w-8 text-white" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-3">One-Click Deposits</h3>
+            <h3 className="text-lg font-semibold text-white mb-3">Universal Gas Refuel</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Bridge and deposit to your favorite perpetual DEX in a single transaction
+              Refuel gas on any chain using any token from any network in a single transaction
             </p>
           </div>
           
@@ -451,9 +445,9 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
             <div className="w-16 h-16 bg-gradient-to-br from-gray-500/20 to-white/20 border border-white/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <Globe className="h-8 w-8 text-white" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-3">Multi-DEX Support</h3>
+            <h3 className="text-lg font-semibold text-white mb-3">Multi-Chain Support</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Support for Hyperliquid, Aevo, Drift Protocol and more leading perpetual exchanges
+              Support for Ethereum, Arbitrum, BNB Smart Chain - refuel gas on any network
             </p>
           </div>
           
@@ -461,11 +455,24 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
             <div className="w-16 h-16 bg-gradient-to-br from-gray-500/20 to-white/20 border border-white/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
               <ArrowRight className="h-8 w-8 text-white" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-3">Nexus Bridge & Execute</h3>
+            <h3 className="text-lg font-semibold text-white mb-3">Smart Gas Routing</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Bridge and execute deposits from any supported chain without manual bridging or network switching
+              Automatically finds the most efficient path for gas refueling across all supported chains
             </p>
           </div>
+        </div>
+
+        <div className="flex justify-center mt-8">
+          <button 
+                onClick={onGetStarted}
+                className="px-6 py-3 bg-black/60 backdrop-blur-2xl border border-white/15 text-white hover:bg-black/80 hover:border-white/25 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl rounded-2xl"
+              >
+                <span className="flex items-center">
+                  <Fuel className="h-4 w-4 mr-2" />
+                  Gas Refuel
+                  {/* <ArrowRight className="h-4 w-4 ml-2" /> */}
+                </span>
+              </button>
         </div>
         </div>
       </section>
