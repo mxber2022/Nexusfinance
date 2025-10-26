@@ -47,22 +47,6 @@ We initially thought the docs were missing stuff, but after diving deeper into t
 
 ### 3. **What We'd Love to See Next**
 
-#### **Perpetual DEX Integration**
-We built a lot of custom integration with Hyperliquid, Aster, and Reya. It would be amazing if the SDK had built-in support for opening positions on these DEXes. Right now we're doing a lot of manual work to:
-- Fetch funding rates
-- Get market data
-- Open/close positions
-- Track PnL
-
-Having SDK methods like `sdk.openPosition({ dex: 'hyperliquid', asset: 'BTC', side: 'long', leverage: 10 })` would be incredible!
-
-#### **Market Data Helpers**
-We're manually fetching funding rates and market data from different DEXes. Having unified market data methods would be super helpful:
-```typescript
-const fundingRates = await sdk.getFundingRates(['BTC', 'ETH']);
-const bestRates = await sdk.getBestFundingRates('BTC'); // Across all DEXes
-```
-
 #### **Token Extensibility & Future Support** 🪙
 While the SDK currently supports USDC, USDT, and ETH well, we'd love to see more comprehensive token support for the future:
 
@@ -78,6 +62,22 @@ One UX improvement we'd love to see is better handling of multiple signature req
 - **Use permit signatures** for gasless approvals (like we implemented for Hyperliquid)
 - **Provide clear progress indicators** showing "Step 1 of 3: Approving USDC..."
 - **Auto-detect when permits are available** and use them instead of traditional approvals
+
+#### **Perpetual DEX Integration**
+We built a lot of custom integration with Hyperliquid, Aster, and Reya. It would be amazing if the SDK had built-in support for opening positions on these DEXes. Right now we're doing a lot of manual work to:
+- Fetch funding rates
+- Get market data
+- Open/close positions
+- Track PnL
+
+Having SDK methods like `sdk.openPosition({ dex: 'hyperliquid', asset: 'BTC', side: 'long', leverage: 10 })` would be incredible!
+
+#### **Market Data Helpers**
+We're manually fetching funding rates and market data from different DEXes. Having unified market data methods would be super helpful:
+```typescript
+const fundingRates = await sdk.getFundingRates(['BTC', 'ETH']);
+const bestRates = await sdk.getBestFundingRates('BTC'); // Across all DEXes
+```
 
 This would make the user experience much smoother, especially for DeFi operations that require multiple steps. Right now users might get confused when they see multiple signature prompts.
 
