@@ -1,7 +1,7 @@
 import React from 'react';
 import { HeroSection } from '../components/sections/HeroSection';
 import { Button } from '../components/ui/Button';
-import { ArrowRight, Fuel, Zap, Globe, TrendingUp, Info, AlertTriangle, CheckCircle, X } from 'lucide-react';
+import { ArrowRight, Fuel, Zap, Globe, TrendingUp, Info, AlertTriangle, CheckCircle, X, DollarSign } from 'lucide-react';
 
 interface HomePageProps {
   onGetStarted: () => void;
@@ -399,7 +399,7 @@ export function HomePage({ onGetStarted, onNavigateToFlowFi, onNavigateToPerpPor
                 className="px-6 py-3 bg-black/60 backdrop-blur-2xl border border-white/15 text-white hover:bg-black/80 hover:border-white/25 hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl rounded-2xl"
               >
                 <span className="flex items-center">
-                  {/* <TrendingUp className="h-4 w-4 mr-2" /> */}
+                  <DollarSign className="h-4 w-4 mr-2" />
                     Yield Optimization 
                   {/* <ArrowRight className="h-4 w-4 ml-2" /> */}
                 </span>
