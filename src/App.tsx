@@ -186,7 +186,7 @@ function App() {
             {[
               { step: 'home', label: 'Home', icon: '🏠' },
               { step: 'refuel', label: 'Refuel', icon: '⛽' },
-              { step: 'flowfi', label: 'Yield', icon: '📈' },
+              { step: 'flowfi', label: 'Yield', icon: '💰' },
               { step: 'perpport', label: 'Perp', icon: '⚡' }
             ].map((item, index) => (
               <button
